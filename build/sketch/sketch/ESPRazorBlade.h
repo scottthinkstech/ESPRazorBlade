@@ -3,6 +3,7 @@
 #define ESPRAZORBLADE_H
 
 #include <WiFi.h>
+#include <ArduinoMqttClient.h>
 #include <Arduino.h>
 #include "Configuration.h"
 #include "freertos/FreeRTOS.h"
@@ -12,14 +13,13 @@
 class ESPRazorBlade;
 
 /**
- * ESPRazorBlade Library - Phase 1: WiFi Only
+ * ESPRazorBlade Library - Phase 2: WiFi + MQTT Connection
  * 
  * Lightweight library for ESP32 devices.
- * Phase 1 Features:
+ * Phase 2 Features:
  * - Resilient WiFi connection with automatic reconnection
+ * - MQTT broker connection with automatic reconnection
  * - RTOS-based non-blocking operation
- * 
- * Future phases will add MQTT telemetry functionality.
  */
 class ESPRazorBlade {
 public:
@@ -35,7 +35,7 @@ public:
     
     /**
      * Initialize the library
-     * Starts WiFi connection task
+     * Starts WiFi and MQTT connection tasks
      * @return true if initialization successful
      */
     bool begin();
@@ -47,23 +47,39 @@ public:
     bool isWiFiConnected();
     
     /**
+     * Check if MQTT is connected
+     * @return true if connected
+     */
+    bool isMQTTConnected();
+    
+    /**
      * Get current WiFi IP address
      * @return IP address as String
      */
     String getIPAddress();
 
 private:
+    // WiFi client
+    WiFiClient wifiClient;
+    
+    // MQTT client
+    ArduinoMqttClient mqttClient;
+    
     // RTOS task handles
     TaskHandle_t wifiTaskHandle;
+    TaskHandle_t mqttTaskHandle;
     
     // Connection state
     bool wifiConnected;
+    bool mqttConnected;
     
     // Static task functions (RTOS entry points)
     static void wifiTask(void* parameter);
+    static void mqttTask(void* parameter);
     
     // Internal helper functions
     void connectWiFi();
+    void connectMQTT();
 };
 
 #endif // ESPRAZORBLADE_H

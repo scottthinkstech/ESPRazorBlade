@@ -1,96 +1,96 @@
 /home/thinks/src/ESPRazorBlade/build/library/core/esp32-hal-cpu.c.o: \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-cpu.c \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/qio_qspi/include/sdkconfig.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/FreeRTOS.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/config/include/freertos/FreeRTOSConfig.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/newlib/platform_include/assert.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/config/riscv/include/freertos/FreeRTOSConfig_arch.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/projdefs.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/portable.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/deprecated_definitions.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/portable/riscv/include/freertos/portmacro.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/newlib/platform_include/stdio.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/spinlock.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_cpu.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/soc_caps.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/riscv/csr.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/riscv/encoding.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_assert.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/riscv/rv_utils.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/interrupt_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/interrupt_matrix_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/soc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_bit_defs.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/reg_base.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/intpri_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/plic_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_attr.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/riscv/interrupt.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/esp_private/interrupt_plic.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/esp_private/interrupt_deprecated.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/riscv/include/riscv/csr_pie.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_intr_alloc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_err.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_compiler.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_intr_types.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_macros.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_assert.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_rom/include/esp_rom_sys.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/reset_reasons.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/heap/include/esp_heap_caps.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/heap/include/multi_heap.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_system/include/esp_system.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_common/include/esp_idf_version.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/newlib/platform_include/esp_newlib.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_timer/include/esp_timer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_etm.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/mpu_wrappers.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/esp_additions/include/freertos/idf_additions.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/task.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/list.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/queue.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/task.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/semphr.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/queue.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/stream_buffer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/message_buffer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/stream_buffer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/event_groups.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/timers.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_config.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_level.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_color.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_buffer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_timestamp.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_write.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_format.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_args.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_log_attr.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/log/include/esp_private/log_attr.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/port/esp32c6/include/soc/rtc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/clk_tree_defs.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/efuse_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/efuse_defs.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/qio_qspi/include/sdkconfig.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/FreeRTOS.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/config/include/freertos/FreeRTOSConfig.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/newlib/platform_include/assert.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/config/riscv/include/freertos/FreeRTOSConfig_arch.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/projdefs.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/portable.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/deprecated_definitions.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/portable/riscv/include/freertos/portmacro.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/newlib/platform_include/stdio.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/spinlock.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_cpu.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/soc_caps.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/riscv/csr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/riscv/encoding.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_assert.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/riscv/rv_utils.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/interrupt_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/interrupt_core0_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/soc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_bit_defs.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/reg_base.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_attr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/riscv/interrupt.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/esp_private/interrupt_intc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/esp_private/interrupt_deprecated.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/riscv/include/riscv/csr_pie.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_intr_alloc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_err.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_compiler.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_intr_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_macros.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_assert.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_rom/include/esp_rom_sys.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/reset_reasons.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/heap/include/esp_heap_caps.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/heap/include/multi_heap.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_system/include/esp_system.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_idf_version.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/newlib/platform_include/esp_newlib.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_timer/include/esp_timer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_etm.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/mpu_wrappers.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/esp_additions/include/freertos/idf_additions.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/task.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/list.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/queue.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/task.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/semphr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/queue.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/stream_buffer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/message_buffer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/stream_buffer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/event_groups.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/freertos/FreeRTOS-Kernel/include/freertos/timers.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_config.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_level.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_color.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_buffer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_timestamp.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_write.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_format.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_args.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_log_attr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/log/include/esp_private/log_attr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/port/esp32c3/include/soc/rtc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/clk_tree_defs.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/rtc_cntl_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/syscon_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/efuse_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/efuse_defs.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_sleep.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/include/hal/touch_sensor_legacy_types.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/include/hal/gpio_types.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/gpio_num.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_sleep.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/include/hal/touch_sensor_legacy_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/include/hal/gpio_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/gpio_num.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-log.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_rom/esp32c6/include/esp32c6/rom/ets_sys.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_rom/esp32c3/include/esp32c3/rom/ets_sys.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-matrix.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/gpio_sig_map.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/gpio_sig_map.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-uart.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/uart_pins.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/io_mux_reg.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/include/hal/uart_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/uart_pins.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/io_mux_reg.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/include/hal/uart_types.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-gpio.h \
- /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/variants/esp32c6/pins_arduino.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_driver_gpio/include/driver/gpio.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_rom/include/esp_rom_gpio.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/gpio_pins.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_driver_gpio/include/driver/gpio_etm.h \
+ /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/variants/XIAO_ESP32C3/pins_arduino.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_driver_gpio/include/driver/gpio.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_rom/include/esp_rom_gpio.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/include/soc/gpio_pins.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_driver_gpio/include/driver/gpio_etm.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-touch.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-touch-ng.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-dac.h \
@@ -98,23 +98,22 @@
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-spi.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-i2c.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-ledc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/include/hal/ledc_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/include/hal/ledc_types.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-rmt.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-sigmadelta.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-timer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_driver_gptimer/include/driver/gptimer_types.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/include/hal/timer_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_driver_gptimer/include/driver/gptimer_types.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/include/hal/timer_types.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-bt.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-psram.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-rgb-led.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-cpu.h \
  /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/esp32-hal-hosted.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/esp32c6/include/hal/timer_ll.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/platform_port/include/hal/assert.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/hal/platform_port/include/hal/misc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/timer_group_struct.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/pcr_struct.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/include/soc/soc_etm_source.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_hw_support/include/esp_private/systimer.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/esp_rom/esp32c6/include/esp32c6/rom/rtc.h \
- /home/thinks/.arduino15/packages/esp32/tools/esp32c6-libs/3.3.6/include/soc/esp32c6/register/soc/lp_aon_reg.h
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/esp32c3/include/hal/timer_ll.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/platform_port/include/hal/assert.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/hal/platform_port/include/hal/misc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/timer_group_struct.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/soc/esp32c3/register/soc/system_struct.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_hw_support/include/esp_private/systimer.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_rom/esp32c3/include/esp32c3/rom/rtc.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_rom/esp32c3/include/esp32c3/rom/ets_sys.h

@@ -1,5 +1,7 @@
 # ESPRazorBlade Build Guide
 
+**Note**: This build script is a development tool located in `scripts/` and is not part of the library distribution. Users should use Arduino IDE for normal development.
+
 ## Prerequisites
 
 - Arduino CLI installed (check with `arduino-cli version`)
@@ -16,7 +18,7 @@ git stash pop
 ### 2. Initialize Arduino CLI (First Time Only)
 
 ```bash
-./build.sh init
+scripts/build.sh init
 ```
 
 This will:
@@ -28,13 +30,13 @@ This will:
 ### 3. Check Setup
 
 ```bash
-./build.sh check
+scripts/build.sh check
 ```
 
 ### 4. Compile Phase 1 Example
 
 ```bash
-./build.sh single Phase1_WiFi
+scripts/build.sh single Phase1_WiFi
 ```
 
 ## Build Commands
@@ -42,7 +44,7 @@ This will:
 ### Compile Library Only
 
 ```bash
-./build.sh library
+scripts/build.sh library
 ```
 
 Compiles the ESPRazorBlade library files to verify they're syntactically correct.
@@ -50,7 +52,7 @@ Compiles the ESPRazorBlade library files to verify they're syntactically correct
 ### Compile Specific Example
 
 ```bash
-./build.sh single Phase1_WiFi
+scripts/build.sh single Phase1_WiFi
 ```
 
 Compiles a specific example sketch. The script will:
@@ -61,7 +63,7 @@ Compiles a specific example sketch. The script will:
 ### Compile All Examples
 
 ```bash
-./build.sh all
+scripts/build.sh all
 ```
 
 Compiles all examples in the `examples/` directory.
@@ -69,13 +71,13 @@ Compiles all examples in the `examples/` directory.
 ### List Available Examples
 
 ```bash
-./build.sh list
+scripts/build.sh list
 ```
 
 ### Clean Build Artifacts
 
 ```bash
-./build.sh clean
+scripts/build.sh clean
 ```
 
 Removes the `build/` directory and all compiled binaries.
@@ -133,7 +135,7 @@ sudo pacman -S arduino-cli
 ### Board Support Not Found
 
 ```bash
-./build.sh init
+scripts/build.sh init
 ```
 
 This will install ESP32 board support.
@@ -204,6 +206,6 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
       - name: Build examples
         run: |
-          ./build.sh init
-          ./build.sh all
+          scripts/build.sh init
+          scripts/build.sh all
 ```

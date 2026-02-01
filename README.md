@@ -138,7 +138,7 @@ The library uses FreeRTOS tasks for non-blocking operation:
 - ESP32 board (any variant)
 - Arduino IDE 2.x or 1.8.x
 - ESP32 Arduino Core (install via Board Manager)
-- PubSubClient library (install via Library Manager)
+- **ArduinoMqttClient library** (install via Library Manager) - Required for Phase 2+
 
 ## Board Setup
 

@@ -18,11 +18,6 @@
 // Create library instance
 ESPRazorBlade razorBlade;
 
-#line 19 "/home/thinks/src/ESPRazorBlade/ESPRazorBlade.ino"
-void setup();
-#line 34 "/home/thinks/src/ESPRazorBlade/ESPRazorBlade.ino"
-void loop();
-#line 19 "/home/thinks/src/ESPRazorBlade/ESPRazorBlade.ino"
 void setup() {
     // Initialize the library
     // This starts WiFi connection task automatically

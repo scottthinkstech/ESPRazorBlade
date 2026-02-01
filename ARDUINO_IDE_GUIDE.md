@@ -41,9 +41,13 @@ ESPRazorBlade is designed to work seamlessly with the standard Arduino IDE. You 
 
 ### 4. Install Library Dependencies
 
-For Phase 1 (WiFi only): No additional libraries needed.
+**Phase 1 (WiFi only)**: No additional libraries needed.
 
-For Phase 2+ (MQTT): Install ArduinoMqttClient via Library Manager.
+**Phase 2+ (MQTT)**: Install **ArduinoMqttClient** via Library Manager:
+1. Tools → Manage Libraries
+2. Search "ArduinoMqttClient"
+3. Install "ArduinoMqttClient by Arduino"
+4. Restart Arduino IDE
 
 ### 5. Open and Upload
 

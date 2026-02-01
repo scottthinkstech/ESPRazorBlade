@@ -1,16 +1,18 @@
 #line 1 "/home/thinks/src/ESPRazorBlade/FLASH_GUIDE.md"
 # Flashing and Testing Guide
 
+**Note**: The build script (`scripts/build.sh`) is a development tool and optional. Users can use Arduino IDE directly.
+
 ## Quick Start
 
 ### 1. Flash and Monitor (One Command)
 
 ```bash
 # Flash root sketch
-./build.sh flash sketch
+scripts/build.sh flash sketch
 
 # Flash Phase1_WiFi example
-./build.sh flash single:Phase1_WiFi
+scripts/build.sh flash single:Phase1_WiFi
 ```
 
 This will:
@@ -22,13 +24,13 @@ This will:
 
 ```bash
 # Compile
-./build.sh sketch
+scripts/build.sh sketch
 
 # Upload
-./build.sh upload sketch
+scripts/build.sh upload sketch
 
 # Monitor (in separate terminal)
-./build.sh monitor
+scripts/build.sh monitor
 ```
 
 ## Board Selection
@@ -37,13 +39,13 @@ The build script defaults to **ESP32-C3** (Xiao). To use a different board:
 
 ```bash
 # ESP32-C3 (default - Xiao)
-BOARD_VARIANT=esp32c3 ./build.sh sketch
+BOARD_VARIANT=esp32c3 scripts/build.sh sketch
 
 # ESP32-C6
-BOARD_VARIANT=esp32c6 ./build.sh sketch
+BOARD_VARIANT=esp32c6 scripts/build.sh sketch
 
 # ESP32-S3
-BOARD_VARIANT=esp32s3 ./build.sh sketch
+BOARD_VARIANT=esp32s3 scripts/build.sh sketch
 ```
 
 ## Serial Port Configuration
@@ -54,11 +56,11 @@ The script will auto-detect serial ports. If multiple devices are connected, spe
 
 ```bash
 # List available ports
-./build.sh ports
+scripts/build.sh ports
 
 # Use specific port
-SERIAL_PORT=/dev/ttyUSB0 ./build.sh upload sketch
-SERIAL_PORT=/dev/ttyUSB0 ./build.sh monitor
+SERIAL_PORT=/dev/ttyUSB0 scripts/build.sh upload sketch
+SERIAL_PORT=/dev/ttyUSB0 scripts/build.sh monitor
 ```
 
 ### Serial Baud Rate
@@ -66,27 +68,27 @@ SERIAL_PORT=/dev/ttyUSB0 ./build.sh monitor
 Default is 115200. To change:
 
 ```bash
-SERIAL_BAUD=9600 ./build.sh monitor
+SERIAL_BAUD=9600 scripts/build.sh monitor
 ```
 
 ## Commands Reference
 
 ### Compilation
-- `./build.sh sketch` - Compile root sketch
-- `./build.sh single Phase1_WiFi` - Compile example
-- `./build.sh library` - Compile library only
+- `scripts/build.sh sketch` - Compile root sketch
+- `scripts/build.sh single Phase1_WiFi` - Compile example
+- `scripts/build.sh library` - Compile library only
 
 ### Uploading
-- `./build.sh upload sketch` - Upload root sketch
-- `./build.sh upload single:Phase1_WiFi` - Upload example
+- `scripts/build.sh upload sketch` - Upload root sketch
+- `scripts/build.sh upload single:Phase1_WiFi` - Upload example
 
 ### Monitoring
-- `./build.sh monitor` - Open serial monitor
-- `./build.sh ports` - List available serial ports
+- `scripts/build.sh monitor` - Open serial monitor
+- `scripts/build.sh ports` - List available serial ports
 
 ### All-in-One
-- `./build.sh flash sketch` - Compile + Upload + Monitor
-- `./build.sh flash single:Phase1_WiFi` - Compile + Upload + Monitor
+- `scripts/build.sh flash sketch` - Compile + Upload + Monitor
+- `scripts/build.sh flash single:Phase1_WiFi` - Compile + Upload + Monitor
 
 ## Testing Workflow
 
@@ -100,7 +102,7 @@ SERIAL_BAUD=9600 ./build.sh monitor
 
 2. **Flash the firmware**:
    ```bash
-   ./build.sh flash sketch
+   scripts/build.sh flash sketch
    ```
 
 3. **Observe serial output**:
@@ -120,13 +122,13 @@ SERIAL_BAUD=9600 ./build.sh monitor
 
 ```bash
 # Check available ports
-./build.sh ports
+scripts/build.sh ports
 
 # Or manually check
 ls -la /dev/ttyUSB* /dev/ttyACM*
 
 # Set port explicitly
-SERIAL_PORT=/dev/ttyUSB0 ./build.sh upload sketch
+SERIAL_PORT=/dev/ttyUSB0 scripts/build.sh upload sketch
 ```
 
 ### Upload Permission Denied
@@ -138,17 +140,17 @@ sudo usermod -a -G dialout $USER
 newgrp dialout
 
 # Or use sudo (not recommended)
-sudo ./build.sh upload sketch
+sudo scripts/build.sh upload sketch
 ```
 
 ### Board Not Found
 
 ```bash
 # Check board support
-./build.sh check
+scripts/build.sh check
 
 # Reinitialize Arduino CLI
-./build.sh init
+scripts/build.sh init
 ```
 
 ### Compilation Errors
