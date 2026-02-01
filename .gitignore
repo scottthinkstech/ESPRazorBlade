@@ -1,0 +1,12 @@
+# Configuration file with sensitive credentials
+Configuration.h
+
+# Development scripts (not part of library)
+scripts/
+
+# Build output
+build/
+
+examples/DevelopmentExample/
+
+.arduino-build/
