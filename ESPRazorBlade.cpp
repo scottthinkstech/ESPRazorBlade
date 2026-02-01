@@ -9,6 +9,7 @@ const int WIFI_CHECK_INTERVAL_MS = 5000;
 const int MQTT_MAX_RETRIES = 10;
 const int MQTT_RETRY_DELAY_MS = 2000;
 const int MQTT_POLL_INTERVAL_MS = 100;
+const int MQTT_INITIAL_DELAY_MS = 3000; // Wait 3 seconds after WiFi connects before first MQTT attempt
 
 // Task stack sizes (in words, 4 bytes each on ESP32)
 const int WIFI_TASK_STACK_SIZE = 4096;
@@ -22,8 +23,12 @@ ESPRazorBlade::ESPRazorBlade()
     : mqttClient(&wifiClient),
       wifiTaskHandle(nullptr),
       mqttTaskHandle(nullptr),
+      mqttMutex(nullptr),
       wifiConnected(false),
-      mqttConnected(false) {
+      mqttConnected(false),
+      mqttConnecting(false),
+      wifiConnectedTime(0),
+      firstMQTTAttempt(true) {
 }
 
 ESPRazorBlade::~ESPRazorBlade() {
@@ -34,13 +39,23 @@ ESPRazorBlade::~ESPRazorBlade() {
     if (mqttTaskHandle != nullptr) {
         vTaskDelete(mqttTaskHandle);
     }
+    if (mqttMutex != nullptr) {
+        vSemaphoreDelete(mqttMutex);
+    }
 }
 
 bool ESPRazorBlade::begin() {
     Serial.begin(115200);
     delay(100); // Give Serial time to initialize
     
-    Serial.println("\n=== ESPRazorBlade Library - Phase 2: WiFi + MQTT ===");
+    Serial.println("\n=== ESPRazorBlade Library - Phase 3: WiFi + MQTT + Publish ===");
+    
+    // Create mutex for thread-safe MQTT operations
+    mqttMutex = xSemaphoreCreateMutex();
+    if (mqttMutex == nullptr) {
+        Serial.println("ERROR: Failed to create MQTT mutex");
+        return false;
+    }
     
     // MQTT client is already initialized with wifiClient in constructor
     // No begin() method needed - we'll use connect() when WiFi is ready
@@ -119,12 +134,17 @@ void ESPRazorBlade::connectWiFi() {
     Serial.println();
     
     if (WiFi.status() == WL_CONNECTED) {
+        // Track when WiFi first connects (for MQTT initial delay)
+        if (!wifiConnected) {
+            wifiConnectedTime = millis();
+        }
         wifiConnected = true;
         Serial.println("WiFi connected!");
         Serial.print("IP address: ");
         Serial.println(WiFi.localIP());
     } else {
         wifiConnected = false;
+        wifiConnectedTime = 0; // Reset on disconnect
         Serial.println("WiFi connection failed!");
         Serial.print("Status: ");
         Serial.println(WiFi.status());
@@ -146,15 +166,27 @@ void ESPRazorBlade::mqttTask(void* parameter) {
             // Check MQTT connection
             if (!instance->mqttClient.connected()) {
                 instance->mqttConnected = false;
-                instance->connectMQTT();
+                // Only attempt connection if we're not already trying
+                // Wait 2 seconds after WiFi connects before first MQTT attempt
+                if (!instance->mqttConnecting) {
+                    unsigned long now = millis();
+                    if (instance->wifiConnectedTime == 0 || 
+                        (now - instance->wifiConnectedTime) >= MQTT_INITIAL_DELAY_MS) {
+                        instance->connectMQTT();
+                    }
+                }
             } else {
                 instance->mqttConnected = true;
+                instance->mqttConnecting = false; // Clear connecting flag when connected
                 
                 // Poll MQTT to maintain connection and process messages
                 instance->mqttClient.poll();
             }
         } else {
             instance->mqttConnected = false;
+            instance->mqttConnecting = false; // Clear connecting flag when WiFi disconnects
+            instance->wifiConnectedTime = 0; // Reset WiFi connection time
+            instance->firstMQTTAttempt = true; // Reset for next WiFi connection
         }
         
         // Small delay to prevent tight loop
@@ -163,6 +195,12 @@ void ESPRazorBlade::mqttTask(void* parameter) {
 }
 
 void ESPRazorBlade::connectMQTT() {
+    // Set connecting flag to prevent overlapping attempts
+    mqttConnecting = true;
+    
+    bool isFirstAttempt = firstMQTTAttempt;
+    firstMQTTAttempt = false; // Mark that we've attempted connection
+    
     Serial.print("Connecting to MQTT broker: ");
     Serial.print(MQTT_BROKER);
     Serial.print(":");
@@ -178,33 +216,136 @@ void ESPRazorBlade::connectMQTT() {
     
     int retryCount = 0;
     int result = 0;
+    bool connected = false;
     
     while (retryCount < MQTT_MAX_RETRIES) {
+        // Check if we're already connected (might have connected from another attempt)
+        if (mqttClient.connected()) {
+            mqttConnected = true;
+            connected = true;
+            Serial.println("MQTT connected!");
+            mqttConnecting = false;
+            return;
+        }
+        
         // Attempt connection (connect() takes host and port)
         result = mqttClient.connect(MQTT_BROKER, MQTT_PORT);
         
         if (result == 0) {
-            mqttConnected = true;
-            Serial.println("MQTT connected!");
-            break;
-        } else {
-            Serial.print("MQTT connection failed, rc=");
-            Serial.print(result);
-            Serial.print(" - retrying in ");
-            Serial.print(MQTT_RETRY_DELAY_MS / 1000);
-            Serial.println(" seconds...");
-            retryCount++;
-            vTaskDelay(pdMS_TO_TICKS(MQTT_RETRY_DELAY_MS));
+            // Verify connection is actually established
+            if (mqttClient.connected()) {
+                mqttConnected = true;
+                connected = true;
+                Serial.println("MQTT connected!");
+                mqttConnecting = false;
+                return;
+            }
+        }
+        
+        // Connection failed or not yet established
+        // On first attempt, try once silently without error messages
+        // Only show errors if first attempt fails
+        if (!isFirstAttempt || retryCount > 0) {
+            if (retryCount == (isFirstAttempt ? 1 : 0)) {
+                // Print failure message only after first silent attempt fails
+                Serial.print("MQTT connection failed (rc=");
+                Serial.print(result);
+                Serial.println("), retrying...");
+            }
+        }
+        retryCount++;
+        vTaskDelay(pdMS_TO_TICKS(MQTT_RETRY_DELAY_MS));
+    }
+    
+    // After retry loop, check one final time if we're connected
+    // (connection might have succeeded during the last delay)
+    if (mqttClient.connected()) {
+        mqttConnected = true;
+        connected = true;
+        Serial.println("MQTT connected!");
+    } else if (!connected) {
+        // Only print failure if we're definitely not connected
+        // Suppress failure message on first attempt to avoid confusing novice users
+        if (!isFirstAttempt) {
+            Serial.print("MQTT connection failed after ");
+            Serial.print(MQTT_MAX_RETRIES);
+            Serial.println(" attempts");
         }
     }
     
-    if (mqttConnected == false) {
-        Serial.println("MQTT connection failed after retries");
-    }
+    mqttConnecting = false;
 }
 
 bool ESPRazorBlade::isMQTTConnected() {
     return mqttConnected && mqttClient.connected();
+}
+
+bool ESPRazorBlade::publish(const char* topic, const char* payload, bool retained) {
+    if (!mqttConnected || !mqttClient.connected()) {
+        return false;
+    }
+    
+    bool result = false;
+    if (xSemaphoreTake(mqttMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
+        mqttClient.beginMessage(topic, retained);
+        mqttClient.print(payload);
+        mqttClient.endMessage();
+        result = true;
+        xSemaphoreGive(mqttMutex);
+    }
+    
+    return result;
+}
+
+bool ESPRazorBlade::publish(const char* topic, float value, bool retained) {
+    if (!mqttConnected || !mqttClient.connected()) {
+        return false;
+    }
+    
+    bool result = false;
+    if (xSemaphoreTake(mqttMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
+        mqttClient.beginMessage(topic, retained);
+        mqttClient.print(value);
+        mqttClient.endMessage();
+        result = true;
+        xSemaphoreGive(mqttMutex);
+    }
+    
+    return result;
+}
+
+bool ESPRazorBlade::publish(const char* topic, int value, bool retained) {
+    if (!mqttConnected || !mqttClient.connected()) {
+        return false;
+    }
+    
+    bool result = false;
+    if (xSemaphoreTake(mqttMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
+        mqttClient.beginMessage(topic, retained);
+        mqttClient.print(value);
+        mqttClient.endMessage();
+        result = true;
+        xSemaphoreGive(mqttMutex);
+    }
+    
+    return result;
+}
+
+bool ESPRazorBlade::publish(const char* topic, long value, bool retained) {
+    if (!mqttConnected || !mqttClient.connected()) {
+        return false;
+    }
+    
+    bool result = false;
+    if (xSemaphoreTake(mqttMutex, pdMS_TO_TICKS(1000)) == pdTRUE) {
+        mqttClient.beginMessage(topic, retained);
+        mqttClient.print(value);
+        mqttClient.endMessage();
+        result = true;
+        xSemaphoreGive(mqttMutex);
+    }
+    
+    return result;
 }
 
 String ESPRazorBlade::getIPAddress() {
