@@ -12,14 +12,19 @@
 // Forward declarations
 class ESPRazorBlade;
 
+// Telemetry callback function type
+// Returns a String that will be published to the topic
+typedef String (*TelemetryCallback)();
+
 /**
- * ESPRazorBlade Library - Phase 3: WiFi + MQTT + Publish
+ * ESPRazorBlade Library - Phase 5: WiFi + MQTT + Publish + Telemetry
  * 
  * Lightweight library for ESP32 devices.
- * Phase 3 Features:
+ * Phase 5 Features:
  * - Resilient WiFi connection with automatic reconnection
  * - MQTT broker connection with automatic reconnection
  * - MQTT publish functionality with thread-safe operations
+ * - Telemetry callback system for automatic data publishing
  * - RTOS-based non-blocking operation
  */
 class ESPRazorBlade {
@@ -78,6 +83,18 @@ public:
     bool publish(const char* topic, float value, bool retained = false);
     bool publish(const char* topic, int value, bool retained = false);
     bool publish(const char* topic, long value, bool retained = false);
+    
+    /**
+     * Register a telemetry callback function
+     * The callback will be executed at the specified interval and its return value
+     * will be published to the given MQTT topic.
+     * 
+     * @param topic MQTT topic to publish to
+     * @param callback Function that returns a String to publish
+     * @param intervalMs Interval in milliseconds between executions
+     * @return true if registration successful (false if max callbacks reached)
+     */
+    bool registerTelemetry(const char* topic, TelemetryCallback callback, unsigned long intervalMs);
 
 private:
     // WiFi client
@@ -100,6 +117,19 @@ private:
     unsigned long wifiConnectedTime;  // Timestamp when WiFi first connected
     bool firstMQTTAttempt;  // Flag to track first MQTT connection attempt (for silent retry)
     
+    // Telemetry callback structure
+    struct TelemetryEntry {
+        char topic[64];              // MQTT topic (max 63 chars + null terminator)
+        TelemetryCallback callback;   // Callback function
+        unsigned long intervalMs;     // Interval between executions
+        unsigned long lastExecution;   // Last execution time
+        bool active;                  // Whether this entry is active
+    };
+    
+    static const int MAX_TELEMETRY_CALLBACKS = 10;
+    TelemetryEntry telemetryCallbacks[MAX_TELEMETRY_CALLBACKS];
+    int telemetryCallbackCount;
+    
     // Static task functions (RTOS entry points)
     static void wifiTask(void* parameter);
     static void mqttTask(void* parameter);
@@ -107,6 +137,7 @@ private:
     // Internal helper functions
     void connectWiFi();
     void connectMQTT();
+    void processTelemetry();  // Process registered telemetry callbacks
 };
 
 #endif // ESPRAZORBLADE_H

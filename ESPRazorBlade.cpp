@@ -28,7 +28,16 @@ ESPRazorBlade::ESPRazorBlade()
       mqttConnected(false),
       mqttConnecting(false),
       wifiConnectedTime(0),
-      firstMQTTAttempt(true) {
+      firstMQTTAttempt(true),
+      telemetryCallbackCount(0) {
+    // Initialize telemetry callback array
+    for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
+        telemetryCallbacks[i].active = false;
+        telemetryCallbacks[i].topic[0] = '\0';
+        telemetryCallbacks[i].callback = nullptr;
+        telemetryCallbacks[i].intervalMs = 0;
+        telemetryCallbacks[i].lastExecution = 0;
+    }
 }
 
 ESPRazorBlade::~ESPRazorBlade() {
@@ -48,7 +57,7 @@ bool ESPRazorBlade::begin() {
     Serial.begin(115200);
     delay(100); // Give Serial time to initialize
     
-    Serial.println("\n=== ESPRazorBlade Library - Phase 3: WiFi + MQTT + Publish ===");
+    Serial.println("\n=== ESPRazorBlade Library - Phase 5: WiFi + MQTT + Publish + Telemetry ===");
     
     // Create mutex for thread-safe MQTT operations
     mqttMutex = xSemaphoreCreateMutex();
@@ -181,6 +190,9 @@ void ESPRazorBlade::mqttTask(void* parameter) {
                 
                 // Poll MQTT to maintain connection and process messages
                 instance->mqttClient.poll();
+                
+                // Process telemetry callbacks
+                instance->processTelemetry();
             }
         } else {
             instance->mqttConnected = false;
@@ -346,6 +358,90 @@ bool ESPRazorBlade::publish(const char* topic, long value, bool retained) {
     }
     
     return result;
+}
+
+bool ESPRazorBlade::registerTelemetry(const char* topic, TelemetryCallback callback, unsigned long intervalMs) {
+    // Check if we've reached the maximum number of callbacks
+    if (telemetryCallbackCount >= MAX_TELEMETRY_CALLBACKS) {
+        Serial.print("ERROR: Maximum number of telemetry callbacks (");
+        Serial.print(MAX_TELEMETRY_CALLBACKS);
+        Serial.println(") reached");
+        return false;
+    }
+    
+    // Validate inputs
+    if (topic == nullptr || callback == nullptr || intervalMs == 0) {
+        Serial.println("ERROR: Invalid telemetry registration parameters");
+        return false;
+    }
+    
+    // Find an available slot
+    int slot = -1;
+    for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
+        if (!telemetryCallbacks[i].active) {
+            slot = i;
+            break;
+        }
+    }
+    
+    if (slot == -1) {
+        Serial.println("ERROR: No available slot for telemetry callback");
+        return false;
+    }
+    
+    // Copy topic (ensure it fits)
+    int topicLen = strlen(topic);
+    if (topicLen >= 64) {
+        Serial.println("ERROR: Topic name too long (max 63 characters)");
+        return false;
+    }
+    
+    strncpy(telemetryCallbacks[slot].topic, topic, 63);
+    telemetryCallbacks[slot].topic[63] = '\0';
+    telemetryCallbacks[slot].callback = callback;
+    telemetryCallbacks[slot].intervalMs = intervalMs;
+    telemetryCallbacks[slot].lastExecution = 0; // Will execute on next check
+    telemetryCallbacks[slot].active = true;
+    
+    telemetryCallbackCount++;
+    
+    Serial.print("Registered telemetry: ");
+    Serial.print(topic);
+    Serial.print(" (interval: ");
+    Serial.print(intervalMs);
+    Serial.println("ms)");
+    
+    return true;
+}
+
+void ESPRazorBlade::processTelemetry() {
+    if (!mqttConnected || !mqttClient.connected()) {
+        return; // Don't process telemetry if MQTT is not connected
+    }
+    
+    unsigned long now = millis();
+    
+    // Process each active telemetry callback
+    for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
+        if (!telemetryCallbacks[i].active || telemetryCallbacks[i].callback == nullptr) {
+            continue;
+        }
+        
+        // Check if it's time to execute this callback
+        unsigned long timeSinceLastExecution = now - telemetryCallbacks[i].lastExecution;
+        
+        // Handle millis() overflow (wraps around after ~49 days)
+        if (telemetryCallbacks[i].lastExecution == 0 || timeSinceLastExecution >= telemetryCallbacks[i].intervalMs) {
+            // Execute callback and publish result
+            String value = telemetryCallbacks[i].callback();
+            
+            if (publish(telemetryCallbacks[i].topic, value.c_str())) {
+                // Update last execution time
+                telemetryCallbacks[i].lastExecution = now;
+            }
+            // If publish fails, we'll retry on next interval (don't update lastExecution)
+        }
+    }
 }
 
 String ESPRazorBlade::getIPAddress() {
