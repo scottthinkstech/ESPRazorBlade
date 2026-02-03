@@ -60,6 +60,14 @@ Compiles a specific example sketch. The script will:
 - Compile the sketch with ESP32-C6 board
 - Output binary to `build/<example_name>/`
 
+Example for Phase 6 stress test:
+
+```bash
+scripts/build.sh build Phase6_StressTest
+```
+
+Make sure `examples/Phase6_StressTest/Configuration.h` exists with valid credentials.
+
 ### Compile All Examples
 
 ```bash

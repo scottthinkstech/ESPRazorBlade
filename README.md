@@ -81,6 +81,19 @@ void loop() {
 }
 ```
 
+## Phase Examples
+
+These sketches live in `examples/` and map directly to the phased plan:
+
+- `Phase1_WiFi` - WiFi connection verification
+- `Phase2_MQTT_Connection` - Basic MQTT connection with ArduinoMqttClient
+- `Phase3_Publish` - Basic publish tests (string/int/float)
+- `Phase5_Telemetry` - Telemetry callback system
+- `Phase6_StressTest` - Keepalive/reconnect stress test and burst publishes
+
+The Phase 6 stress test publishes to `stress/*` topics and is intended for long-running
+stability checks (WiFi or broker restarts).
+
 ## API Reference
 
 ### `begin()`

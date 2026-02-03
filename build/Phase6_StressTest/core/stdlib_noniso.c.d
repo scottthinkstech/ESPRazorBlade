@@ -1,0 +1,10 @@
+/home/thinks/src/ESPRazorBlade/build/Phase6_StressTest/core/stdlib_noniso.c.o: \
+ /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/stdlib_noniso.c \
+ /home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6/cores/esp32/stdlib_noniso.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_system/include/esp_system.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_err.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/newlib/platform_include/stdio.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_compiler.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_attr.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_bit_defs.h \
+ /home/thinks/.arduino15/packages/esp32/tools/esp32c3-libs/3.3.6/include/esp_common/include/esp_idf_version.h
