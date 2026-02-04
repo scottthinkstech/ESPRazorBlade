@@ -3,3 +3,6 @@ Configuration.h
 
 # Development scripts (not part of library)
 scripts/
+
+# Build output
+build/
