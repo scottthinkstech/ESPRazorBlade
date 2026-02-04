@@ -6,3 +6,5 @@ scripts/
 
 # Build output
 build/
+
+examples/DevelopmentExample/
