@@ -31,13 +31,21 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 
 1. Copy the `ESPRazorBlade` folder to your Arduino `libraries` directory
 2. Restart Arduino IDE
-3. File → Examples → ESPRazorBlade → Phase1_WiFi
+3. File → Examples → ESPRazorBlade → [Choose an example]
 4. Copy `Configuration.h.example` to `Configuration.h` in the example folder
 5. Add your WiFi credentials
+
+**Available examples:**
+- `Basic_MQTT_NoAuth` - Simple MQTT without authentication
+- `MQTT_With_Auth` - Secure MQTT with username/password
 
 See [ARDUINO_IDE_GUIDE.md](ARDUINO_IDE_GUIDE.md) for detailed instructions.
 
 ## Quick Start
+
+> **👉 See complete, ready-to-use examples in the [`examples/`](examples/) directory:**
+> - **[Basic_MQTT_NoAuth](examples/Basic_MQTT_NoAuth/)** - Simple MQTT without authentication
+> - **[MQTT_With_Auth](examples/MQTT_With_Auth/)** - Secure MQTT with username/password
 
 ### 1. Configure Settings
 
@@ -56,80 +64,160 @@ Copy `Configuration.h.example` to `Configuration.h` and fill in your credentials
 // #define MQTT_PASSWORD "your_password"
 ```
 
-### 2. Basic Usage
+### 2. Basic Usage Examples
 
-```cpp
-#include "ESPRazorBlade.h"
+#### Example 1: MQTT Without Authentication
 
-ESPRazorBlade razorBlade;
+Perfect for local development or public test brokers.
 
-// Telemetry callback function
-String readTemperature() {
-    float temp = 22.5; // Read from your sensor
-    return String(temp, 1);
-}
-
-void setup() {
-    razorBlade.begin(); // Initialize WiFi and MQTT
-    
-    // Register telemetry to publish every 30 seconds
-    razorBlade.registerTelemetry("sensor/temperature", readTemperature, 30000);
-}
-
-void loop() {
-    // Your code here - library runs in background!
-    
-    // Optional: Manual publish
-    razorBlade.publish("device/status", "online");
-}
-```
-
-## MQTT with Authentication
-
-For MQTT brokers that require username and password authentication:
-
-```cpp
-#include "ESPRazorBlade.h"
-
-ESPRazorBlade razorBlade;
-
-void setup() {
-    Serial.begin(115200);
-    
-    // Initialize with WiFi and MQTT auth from Configuration.h
-    razorBlade.begin();
-    
-    // Wait for connections
-    while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
-        delay(100);
-    }
-    
-    Serial.println("Connected with authentication!");
-    Serial.print("IP Address: ");
-    Serial.println(razorBlade.getIPAddress());
-    
-    // Publish authenticated message
-    razorBlade.publish("device/authenticated", "true");
-}
-
-void loop() {
-    // Your authenticated code here
-}
-```
-
-**Configuration.h for authenticated MQTT:**
-
+**Configuration.h:**
 ```cpp
 #define WIFI_SSID "your_wifi_ssid"
 #define WIFI_PASSWORD "your_wifi_password"
 
-#define MQTT_BROKER "broker.example.com"
+#define MQTT_BROKER "192.168.1.100"  // Your local broker IP
 #define MQTT_PORT 1883
-#define MQTT_CLIENT_ID "ESPRazorBlade_Client"
+#define MQTT_CLIENT_ID "ESPRazorBlade_Device1"
+
+// No authentication required - leave these commented out
+// #define MQTT_USERNAME "username"
+// #define MQTT_PASSWORD "password"
+```
+
+**Sketch:**
+```cpp
+#include "ESPRazorBlade.h"
+
+ESPRazorBlade razorBlade;
+
+// Telemetry callback - reads sensor value
+String readTemperature() {
+    float temp = 22.5; // Replace with actual sensor reading
+    return String(temp, 1);
+}
+
+void setup() {
+    Serial.begin(115200);
+    
+    // Initialize WiFi and MQTT (no auth)
+    if (!razorBlade.begin()) {
+        Serial.println("Failed to initialize!");
+        while (1) delay(1000);
+    }
+    
+    Serial.println("Waiting for connections...");
+    
+    // Wait for both WiFi and MQTT
+    while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
+        delay(100);
+    }
+    
+    Serial.println("Connected!");
+    Serial.print("IP Address: ");
+    Serial.println(razorBlade.getIPAddress());
+    
+    // Register automatic telemetry (publishes every 30 seconds)
+    razorBlade.registerTelemetry("home/esp32/temperature", readTemperature, 30000);
+    
+    // Publish startup message
+    razorBlade.publish("home/esp32/status", "online");
+}
+
+void loop() {
+    // Your code here - library handles publishing in background
+    
+    // Example: Manual publish on button press
+    static bool lastButtonState = false;
+    bool buttonState = digitalRead(2);
+    
+    if (buttonState && !lastButtonState) {
+        razorBlade.publish("home/esp32/button", "pressed");
+    }
+    lastButtonState = buttonState;
+    
+    delay(50);
+}
+```
+
+#### Example 2: MQTT With Authentication
+
+For secure production deployments with authenticated brokers.
+
+**Configuration.h:**
+```cpp
+#define WIFI_SSID "your_wifi_ssid"
+#define WIFI_PASSWORD "your_wifi_password"
+
+#define MQTT_BROKER "mqtt.example.com"  // Or IP: "192.168.1.100"
+#define MQTT_PORT 1883
+#define MQTT_CLIENT_ID "ESPRazorBlade_Device1"
 
 // Enable MQTT authentication
-#define MQTT_USERNAME "your_mqtt_username"
-#define MQTT_PASSWORD "your_mqtt_password"
+#define MQTT_USERNAME "esp32_user"
+#define MQTT_PASSWORD "secure_password123"
+```
+
+**Sketch:**
+```cpp
+#include "ESPRazorBlade.h"
+
+ESPRazorBlade razorBlade;
+
+// Multiple sensor callbacks
+String readTemperature() {
+    float temp = 22.5; // Replace with actual DHT22, DS18B20, etc.
+    return String(temp, 1);
+}
+
+String readHumidity() {
+    float humidity = 65.0; // Replace with actual sensor
+    return String(humidity, 1);
+}
+
+void setup() {
+    Serial.begin(115200);
+    
+    // Initialize with authentication (from Configuration.h)
+    if (!razorBlade.begin()) {
+        Serial.println("Failed to initialize!");
+        while (1) delay(1000);
+    }
+    
+    Serial.println("Connecting with authentication...");
+    
+    // Wait for both WiFi and MQTT
+    while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
+        Serial.print(".");
+        delay(500);
+    }
+    
+    Serial.println("\nAuthenticated and connected!");
+    Serial.print("IP Address: ");
+    Serial.println(razorBlade.getIPAddress());
+    
+    // Register multiple telemetry streams
+    razorBlade.registerTelemetry("sensors/temperature", readTemperature, 30000);
+    razorBlade.registerTelemetry("sensors/humidity", readHumidity, 30000);
+    
+    // Publish device info
+    razorBlade.publish("device/status", "online", true);  // Retained
+    razorBlade.publish("device/firmware", "1.0.0");
+}
+
+void loop() {
+    // Your authenticated application code
+    // Library handles reconnection with auth credentials automatically
+    
+    // Example: Publish system metrics periodically
+    static unsigned long lastMetrics = 0;
+    if (millis() - lastMetrics > 60000) {  // Every minute
+        razorBlade.publish("device/uptime", millis() / 1000);  // Seconds
+        razorBlade.publish("device/free_heap", ESP.getFreeHeap());
+        lastMetrics = millis();
+    }
+    
+    delay(100);
+}
 ```
 
 ## API Reference
