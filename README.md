@@ -5,10 +5,13 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 ## Features
 
 - **Easy WiFi Configuration**: Simple WiFi setup via `Configuration.h`
-- **Resilient Connections**: Automatic WiFi and MQTT reconnection with keepalive management
-- **RTOS-Based**: Non-blocking operation using FreeRTOS tasks
-- **Simple Telemetry Pattern**: Register callback functions that automatically publish data at intervals
-- **MQTT Pub/Sub**: Full MQTT support with easy publish methods
+- **Resilient WiFi**: Automatic reconnect with retry and status checks
+- **MQTT Connectivity**: ArduinoMqttClient-based connect/reconnect with keepalive polling
+- **MQTT Auth Support**: Optional username/password configuration
+- **Thread-Safe Publish**: Mutex-protected publish helpers for string/int/float/long
+- **Telemetry Callbacks**: Register interval-based callbacks that publish automatically
+- **Connection Status APIs**: `isWiFiConnected()`, `isMQTTConnected()`, `getIPAddress()`
+- **RTOS-Based**: FreeRTOS tasks keep networking non-blocking
 - **ESP32 Compatible**: Works with all ESP32 variants (ESP32-C3, ESP32-C6, ESP32-S3, etc.)
 
 ## Installation
@@ -88,6 +91,7 @@ These sketches live in `examples/` and map directly to the phased plan:
 - `Phase1_WiFi` - WiFi connection verification
 - `Phase2_MQTT_Connection` - Basic MQTT connection with ArduinoMqttClient
 - `Phase3_Publish` - Basic publish tests (string/int/float)
+- `Phase4_RTOS` - RTOS task integration test (background MQTT polling)
 - `Phase5_Telemetry` - Telemetry callback system
 - `Phase6_StressTest` - Keepalive/reconnect stress test and burst publishes
 
