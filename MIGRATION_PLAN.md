@@ -91,6 +91,8 @@ Implement ESPRazorBlade using ArduinoMqttClient from Phase 2 onwards (no PubSubC
 - Updated `ESPRazorBlade.cpp` - RTOS MQTT task implementation
 - `examples/Phase4_RTOS/Phase4_RTOS.ino` - Test sketch
 
+**Status**: Implemented (example added in `examples/Phase4_RTOS/`)
+
 **Test Sketch Features**:
 - Verify MQTT runs in background task
 - Test publish from main loop while task runs
