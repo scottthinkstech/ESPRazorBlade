@@ -1,9 +1,0 @@
-{
-  "additionalFiles": "../..",
-  "compiler.optimization_flags": "-Os",
-  "customBuildProperties": "",
-  "fqbn": "esp32:esp32:XIAO_ESP32C3",
-  "hardwareFolders": "/home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6,/home/thinks/.arduino15/packages/esp32/hardware/esp32/3.3.6",
-  "otherLibrariesFolders": "/home/thinks/Arduino/libraries",
-  "sketchLocation": "/home/thinks/src/ESPRazorBlade/examples/Phase6_StressTest"
-}

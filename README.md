@@ -84,19 +84,53 @@ void loop() {
 }
 ```
 
-## Phase Examples
+## MQTT with Authentication
 
-These sketches live in `examples/` and map directly to the phased plan:
+For MQTT brokers that require username and password authentication:
 
-- `Phase1_WiFi` - WiFi connection verification
-- `Phase2_MQTT_Connection` - Basic MQTT connection with ArduinoMqttClient
-- `Phase3_Publish` - Basic publish tests (string/int/float)
-- `Phase4_RTOS` - RTOS task integration test (background MQTT polling)
-- `Phase5_Telemetry` - Telemetry callback system
-- `Phase6_StressTest` - Keepalive/reconnect stress test and burst publishes
+```cpp
+#include "ESPRazorBlade.h"
 
-The Phase 6 stress test publishes to `stress/*` topics and is intended for long-running
-stability checks (WiFi or broker restarts).
+ESPRazorBlade razorBlade;
+
+void setup() {
+    Serial.begin(115200);
+    
+    // Initialize with WiFi and MQTT auth from Configuration.h
+    razorBlade.begin();
+    
+    // Wait for connections
+    while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
+        delay(100);
+    }
+    
+    Serial.println("Connected with authentication!");
+    Serial.print("IP Address: ");
+    Serial.println(razorBlade.getIPAddress());
+    
+    // Publish authenticated message
+    razorBlade.publish("device/authenticated", "true");
+}
+
+void loop() {
+    // Your authenticated code here
+}
+```
+
+**Configuration.h for authenticated MQTT:**
+
+```cpp
+#define WIFI_SSID "your_wifi_ssid"
+#define WIFI_PASSWORD "your_wifi_password"
+
+#define MQTT_BROKER "broker.example.com"
+#define MQTT_PORT 1883
+#define MQTT_CLIENT_ID "ESPRazorBlade_Client"
+
+// Enable MQTT authentication
+#define MQTT_USERNAME "your_mqtt_username"
+#define MQTT_PASSWORD "your_mqtt_password"
+```
 
 ## API Reference
 
