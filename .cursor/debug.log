@@ -1,8 +1,0 @@
-{"sessionId":"debug-session","runId":"broker-check","hypothesisId":"A","location":"mqtt_helper.sh:check_mqtt_broker","message":"Broker check starting","data":{"broker":"localhost","port":"1883"},"timestamp":1770137333945}
-{"sessionId":"debug-session","runId":"broker-check","hypothesisId":"B","location":"mqtt_helper.sh:check_mqtt_broker","message":"Testing TCP connectivity","data":{"broker":"localhost","port":"1883"},"timestamp":1770137333945}
-{"sessionId":"debug-session","runId":"broker-check","hypothesisId":"B","location":"mqtt_helper.sh:check_mqtt_broker","message":"TCP connection successful","data":{"broker":"localhost","port":"1883"},"timestamp":1770137333948}
-{"sessionId":"debug-session","runId":"tc5_2","hypothesisId":"A","location":"tc5_2_timing.sh","message":"Starting MQTT monitor","data":{"broker":"localhost","port":"1883","duration":120,"temp_file":"/tmp/tmp.s5l8G9PWib"},"timestamp":1770137333948}
-{"sessionId":"debug-session","runId":"tc5_2","hypothesisId":"A","location":"tc5_2_timing.sh","message":"Monitor started","data":{"pid":1048501},"timestamp":1770137333949}
-{"sessionId":"debug-session","runId":"tc5_2","hypothesisId":"A","location":"tc5_2_timing.sh","message":"Monitor finished","data":{"file_size":301},"timestamp":1770137453952}
-{"sessionId":"debug-session","runId":"tc5_2","hypothesisId":"B","location":"tc5_2_timing.sh","message":"Monitor output sample","data":{"monitor_exit":124,"line_count":48,"sample_topic":"81","sample_lines":"81|24.2|82|"},"timestamp":1770137453955}
-{"sessionId":"debug-session","runId":"tc5_2","hypothesisId":"A","location":"tc5_2_timing.sh","message":"Message counts","data":{"counter":0,"temperature":0,"uptime":0,"status":0},"timestamp":1770137454019}

@@ -31,35 +31,36 @@ String readHumidity() {
 
 void setup() {
     Serial.begin(115200);
+    delay(100);
     Serial.println("\n=== Basic MQTT Example (No Auth) ===\n");
     
-    // Initialize library
-    if (!razorBlade.begin()) {
-        Serial.println("ERROR: Failed to initialize! Check Configuration.h");
-        while (1) delay(1000);
-    }
+    // // Initialize library
+    // if (!razorBlade.begin()) {
+    //     Serial.println("ERROR: Failed to initialize! Check Configuration.h");
+    //     while (1) delay(1000);
+    // }
     
-    // Wait for connections
-    Serial.println("Connecting...");
-    unsigned long startTime = millis();
-    while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
-        delay(500);
-        if (millis() - startTime > 30000) {
-            Serial.println("ERROR: Connection timeout!");
-            while (1) delay(1000);
-        }
-    }
+    // // Wait for connections
+    // Serial.println("Connecting...");
+    // unsigned long startTime = millis();
+    // while (!razorBlade.isWiFiConnected() || !razorBlade.isMQTTConnected()) {
+    //     delay(500);
+    //     if (millis() - startTime > 30000) {
+    //         Serial.println("ERROR: Connection timeout!");
+    //         while (1) delay(1000);
+    //     }
+    // }
     
-    Serial.println("Connected!");
-    Serial.print("IP: ");
-    Serial.println(razorBlade.getIPAddress());
+    // Serial.println("Connected!");
+    // Serial.print("IP: ");
+    // Serial.println(razorBlade.getIPAddress());
     
-    // Register telemetry (publishes every 30 seconds)
-    razorBlade.registerTelemetry("home/esp32/temperature", readTemperature, 30000);
-    razorBlade.registerTelemetry("home/esp32/humidity", readHumidity, 30000);
+    // // Register telemetry (publishes every 30 seconds)
+    // razorBlade.registerTelemetry("home/esp32/temperature", readTemperature, 30000);
+    // razorBlade.registerTelemetry("home/esp32/humidity", readHumidity, 30000);
     
-    // Publish startup message
-    razorBlade.publish("home/esp32/status", "online", true);
+    // // Publish startup message
+    // razorBlade.publish("home/esp32/status", "online", true);
     
     Serial.println("Setup complete!\n");
 }
@@ -68,11 +69,12 @@ void loop() {
     // Your code here - library runs in background
     
     // Optional: Send heartbeat every minute
-    static unsigned long lastHeartbeat = 0;
-    if (millis() - lastHeartbeat > 60000) {
-        razorBlade.publish("home/esp32/heartbeat", millis() / 1000);
-        lastHeartbeat = millis();
-    }
+    // static unsigned long lastHeartbeat = 0;
+    // if (millis() - lastHeartbeat > 60000) {
+    //     razorBlade.publish("home/esp32/heartbeat", millis() / 1000);
+    //     lastHeartbeat = millis();
+    // }
     
-    delay(100);
+    delay(2000);
+    Serial.println("Loop complete!");
 }
