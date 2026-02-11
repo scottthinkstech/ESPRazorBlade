@@ -1,0 +1,38 @@
+# Project TODOs
+
+## Sanitize Git History Before Publishing
+
+Git history contains WiFi SSIDs and passwords from development. Must be cleaned before publishing.
+
+### Suggested approaches
+
+1. **git filter-repo** (recommended)
+   - Install: `pip install git-filter-repo`
+   - Remove specific file(s), e.g. `Configuration.h`:
+     ```bash
+     git filter-repo --path Configuration.h --invert-paths
+     ```
+   - Or replace strings in history (for credentials that appear in multiple files):
+     ```bash
+     git filter-repo --replace-text <(echo 'OLD_SSID==>REDACTED')
+     ```
+   - Requires a fresh clone or `git filter-repo --force` if repo has existing remotes.
+
+2. **BFG Repo-Cleaner**
+   - Download from https://rtyley.github.io/bfg-repo-cleaner/
+   - Replace passwords in any file:
+     ```bash
+     java -jar bfg.jar --replace-text passwords.txt
+     ```
+   - `passwords.txt` lists patterns: `OLD_PASSWORD==>REDACTED`
+   - Then: `git reflog expire --expire=now --all && git gc --prune=now --aggressive`
+
+3. **Pre-publish checklist**
+   - Identify all files that ever contained credentials (e.g. `Configuration.h`, `.env`, example configs)
+   - Ensure `Configuration.h` is in `.gitignore` and `Configuration.h.example` is the committed template
+   - Run a final scan: `git log -p | grep -i -E '(ssid|password|wifi)'` to confirm nothing leaks
+
+### Notes
+
+- Rewriting history changes all commit hashes; coordinate with any collaborators.
+- After cleaning, consider force-pushing a new branch and archival of the old one if already shared.
