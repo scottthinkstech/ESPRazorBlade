@@ -165,30 +165,36 @@ void loop() {
 ```
 
 ## Development Script (`deploy.sh`)
-
-Use `scripts/deploy.sh` for local development builds from the repository root.
-
-### Prerequisites
-
-- `arduino-cli` installed and available in `PATH`
-- ESP32 board package installed in Arduino CLI/IDE
-
-### Basic Usage
+￼
+￼
+￼￼
+### Basic Usage (Compile + Upload)
 
 ```bash
-./scripts/deploy.sh --dev
+./scripts/deploy.sh
 ```
 
-This compiles the `examples/Basic_Usage` sketch with:
+This compiles the `examples/Basic_Usage` sketch, then uploads it to a connected board.
+You can also run `./scripts/deploy.sh --dev` for the same compile+upload behavior.
 
-- Board FQBN: `esp32:esp32:esp32c3` (default)
-- Build directory: `.arduino-build/basic-usage`
-- Local library path: current repository root
+### Compile Only (No Upload)
+
+```bash
+./scripts/deploy.sh --compile-only
+```
 
 ### Select a Different Board Target
 
 ```bash
-./scripts/deploy.sh --dev --fqbn esp32:esp32:esp32s3
+./scripts/deploy.sh --fqbn esp32:esp32:esp32s3
+```
+
+### Specify Upload Port
+
+If multiple boards are connected, specify the target serial device:
+
+```bash
+./scripts/deploy.sh --port /dev/ttyACM0
 ```
 
 ### Show Script Help
@@ -199,7 +205,8 @@ This compiles the `examples/Basic_Usage` sketch with:
 
 ### Troubleshooting
 
-- If build cleanup fails with a permissions error in `.arduino-build`, either fix directory ownership or compile with a writable temporary build path using `arduino-cli` directly.
+- If upload fails with serial port permission errors (for example, `/dev/ttyACM* is not readable`), add your user to the serial-access group (`uucp`/`dialout`, distro dependent), then reconnect the board.
+- If build directory permissions are wrong, the script falls back to `/tmp/esprazorblade-basic-usage-build`.
 
 ## API Reference
 
