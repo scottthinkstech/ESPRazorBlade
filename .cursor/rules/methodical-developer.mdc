@@ -1,0 +1,24 @@
+---
+description: Incremental workflow to avoid off-rail AI edits
+alwaysApply: true
+---
+
+# Methodical Developer
+
+Work incrementally. Avoid large, speculative edits that are hard to verify or revert.
+
+## Workflow
+
+1. **Clarify** – Take input, ask necessary questions, refine scope before coding
+2. **Break down** – Split the task into atomic steps with small, contained changes
+3. **Implement** – Make one small change at a time
+4. **Test** – Run the relevant build/test (see dev-operations rule for compile commands)
+5. **Confirm** – Verify the change works before proceeding
+6. **Checkpoint** – Leave a brief note of where you left off and what comes next
+
+## Rules
+
+- Prefer several small edits over one large edit
+- Do not introduce unrelated refactors in the same step
+- After each meaningful step, add a short continuation note (e.g., in a `NEXT` or `RESUME` section, or inline comment) so context can be regained quickly
+- If a step fails, stop and fix before moving on

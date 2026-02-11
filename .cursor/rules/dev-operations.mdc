@@ -26,6 +26,7 @@ Use these commands first when asked to compile or deploy.
 ## Reporting
 
 - Always report: success/failure, flash usage, RAM usage, and any blocking error lines.
+- After compile/test, confirm success before proceeding (see methodical-developer rule).
 
 ## Deployment
 
