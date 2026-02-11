@@ -22,7 +22,7 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 2. Open `ESPRazorBlade.ino` or an example sketch in Arduino IDE
 3. Copy `Configuration.h.example` to `Configuration.h` in the same directory
 4. Edit `Configuration.h` with your WiFi credentials
-5. Install ESP32 board support (see [Arduino IDE Guide](ARDUINO_IDE_GUIDE.md))
+5. Install ESP32 board support (see [Arduino IDE Guide](ARDUINO_IDE_GUIDE.md))d
 6. Select your board and upload!
 
 **Note**: `Configuration.h` is gitignored - your credentials stay local.
@@ -163,6 +163,43 @@ void loop() {
     delay(100);
 }
 ```
+
+## Development Script (`deploy.sh`)
+
+Use `scripts/deploy.sh` for local development builds from the repository root.
+
+### Prerequisites
+
+- `arduino-cli` installed and available in `PATH`
+- ESP32 board package installed in Arduino CLI/IDE
+
+### Basic Usage
+
+```bash
+./scripts/deploy.sh --dev
+```
+
+This compiles the `examples/Basic_Usage` sketch with:
+
+- Board FQBN: `esp32:esp32:esp32c3` (default)
+- Build directory: `.arduino-build/basic-usage`
+- Local library path: current repository root
+
+### Select a Different Board Target
+
+```bash
+./scripts/deploy.sh --dev --fqbn esp32:esp32:esp32s3
+```
+
+### Show Script Help
+
+```bash
+./scripts/deploy.sh --help
+```
+
+### Troubleshooting
+
+- If build cleanup fails with a permissions error in `.arduino-build`, either fix directory ownership or compile with a writable temporary build path using `arduino-cli` directly.
 
 ## API Reference
 
