@@ -69,10 +69,12 @@ Launch the ESP32RazorBlade Arduino Library by following an incremental and phase
 + Test harness (exists, but is not working, requirements will be defined when we come to this task)
 + Default telemetry metrics working: WiFi RSSI, time alive, free heap, reset reason (broadcast to MQTT when connected)
 + Telemetry timeout configuration values movable to Configuration.h and published to MQTT on connect (Phase 9 complete)
++ Device subscribes to config topics and hot-reloads timeout values in real-time (Phase 11 complete)
++ Config changes trigger immediate metric publish with new interval applied
 
 ## Where We Left Off (2026-02-12)
 
-Phase 11 completed: Device subscribes to config topics and hot-reloads telemetry timeout values when published, with immediate metric re-publish on config change.
+Phase 11 completed and tested: Device subscribes to config topics and hot-reloads telemetry timeout values when published. Fixed subscription timing issue where devices staying connected across code updates wouldn't subscribe - now checks and subscribes in main MQTT loop if needed. Immediate metric re-publish on config change working correctly.
 
 ## Phased Development Plan
 
