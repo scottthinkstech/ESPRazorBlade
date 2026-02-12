@@ -75,21 +75,32 @@ Default telemetry metrics (WiFi RSSI, time alive, reset reason) are working. Nex
 
 ## Phased Development Plan
 
-### Phase X: Hot Configurable Telemetry Metrics
+### Phase 9: Publish Default Telemetry Metric Timeouts on Start
 
-Make the timeouts for publishing telemetry info configurable by putting their values in the Configuration.h file. On load, the timeout values will be pulled from Configuration. Once connected to the MQTT server, the server will check configured MQTT topics to see if a different value has been published and retained. If a value is located for the configuration item at the MQTT topic, update running logic to utlize the new value, else, use the value defined in `Configuration.h`.
+When the device starts, publish timeout values assigned to default telemetry to the MQTT server.
 
-METRIC CONFIGURATION
+METRIC TIMEOUT PUBLISH
 + WiFi Signal Telemetry 
-    - Publish Timeout in milliseconds
-    - MQTT topic to subscribe to containing the mutable timeout in ms
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/timeout/wifi_rssi"
 + Time Alive Telemetry
-    - Publish Timeout in milliseconds
-    - MQTT topic to subscribe to containing the mutable timeout in ms
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/timeout/time_alive"
 + Free Heap Memrory
-    - Publish Timeout in milliseconds
-    - MQTT topic to subscribe to containing the mutable timeout in ms
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/heap_memory"
 
 DELIVERABLES
-+ all specified telemetry configuration items can be set in Configuration.h
-+ all specified telemetry configuration items can be changed by publishing to the correct MQTT topic
++ on load, metric timeouts are published to the correct topics
+
+
+### Phase 11: Hot Load Default Telemetry Metric Timeouts
+
+After device has started and connected to the MQTT server, subscribe to telemetry configuration topics. As the device is running, update the appropriate configuration value. Example, if "<device-id>/config/timeout/wifi_rssi" gets the value 90000 published, the Wifi RSSI telmetry metric timeout will change from whatever it is currently to 90000. T
+
+METRIC CONFIGURATION
++ On load, load default metric configuration values from configuration.h
++ Subscribe to telemetry metric topics
++ When values are published to the topics, update the corresponding configuration value
++ Immediately send metric that had configuration value changed (e.g. if wifi rssi timeout was changed, send wifi rssi telemetry metric now)
++ Use the new configuration value (eg. wifi rssi would publish next metric in 90000 ms)
+
+DELIVERABLES
++ when publishing to a telemetry metric topic, the device updates the metric config and begins using it in real time. 
