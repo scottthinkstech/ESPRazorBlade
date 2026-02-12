@@ -120,6 +120,7 @@ private:
     bool firstMQTTAttempt;  // Flag to track first MQTT connection attempt (for silent retry)
     bool resetReasonPublished;  // Flag for one-time reset reason publish on boot
     bool configTimeoutsPublished;  // Flag for one-time config timeout publish on MQTT connect
+    bool configTopicsSubscribed;  // Flag to track if config topics have been subscribed
     
     // Telemetry callback structure
     struct TelemetryEntry {
@@ -134,9 +135,15 @@ private:
     TelemetryEntry telemetryCallbacks[MAX_TELEMETRY_CALLBACKS];
     int telemetryCallbackCount;
     
+    // Static instance pointer for callback access
+    static ESPRazorBlade* instance;
+    
     // Static task functions (RTOS entry points)
     static void wifiTask(void* parameter);
     static void mqttTask(void* parameter);
+    
+    // Static MQTT callback (MQTT message handler)
+    static void onMQTTMessage(int messageSize);
     
     // Internal helper functions
     void connectWiFi();
@@ -144,6 +151,8 @@ private:
     void processTelemetry();  // Process registered telemetry callbacks
     void publishBootTelemetry();  // One-time status and reset reason on MQTT connect
     void publishConfigurationTimeouts();  // One-time config timeout publish on MQTT connect
+    void handleConfigUpdate(const char* topic, String payload);  // Handle config topic updates
+    void subscribeToConfigTopics();  // Subscribe to configuration topics
 };
 
 #endif // ESPRAZORBLADE_H

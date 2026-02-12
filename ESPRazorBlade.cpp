@@ -1,6 +1,9 @@
 #include "ESPRazorBlade.h"
 #include "esp_system.h"
 
+// Static instance pointer for callback access
+ESPRazorBlade* ESPRazorBlade::instance = nullptr;
+
 #ifndef DEVICE_ID
 #define DEVICE_ID "ESPRazorBlade"
 #endif
@@ -81,7 +84,11 @@ ESPRazorBlade::ESPRazorBlade()
       firstMQTTAttempt(true),
       telemetryCallbackCount(0),
       resetReasonPublished(false),
-      configTimeoutsPublished(false) {
+      configTimeoutsPublished(false),
+      configTopicsSubscribed(false) {
+    // Set static instance pointer for callback access
+    instance = this;
+    
     // Initialize telemetry callback array
     for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
         telemetryCallbacks[i].active = false;
@@ -245,6 +252,12 @@ void ESPRazorBlade::mqttTask(void* parameter) {
                 instance->mqttConnected = true;
                 instance->mqttConnecting = false; // Clear connecting flag when connected
                 
+                // Subscribe to config topics if not already subscribed
+                // This handles cases where device was already connected when code was updated
+                if (!instance->configTopicsSubscribed) {
+                    instance->subscribeToConfigTopics();
+                }
+                
                 // Poll MQTT to maintain connection and process messages
                 instance->mqttClient.poll();
                 
@@ -258,6 +271,7 @@ void ESPRazorBlade::mqttTask(void* parameter) {
             instance->firstMQTTAttempt = true; // Reset for next WiFi connection
             instance->resetReasonPublished = false; // Reset for next MQTT connection
             instance->configTimeoutsPublished = false; // Reset for next MQTT connection
+            instance->configTopicsSubscribed = false; // Reset for next MQTT connection
         }
         
         // Small delay to prevent tight loop
@@ -308,6 +322,10 @@ void ESPRazorBlade::connectMQTT() {
                 mqttConnected = true;
                 connected = true;
                 Serial.println("MQTT connected!");
+                
+                // Subscribe to configuration topics
+                subscribeToConfigTopics();
+                
                 mqttConnecting = false;
                 return;
             }
@@ -334,6 +352,9 @@ void ESPRazorBlade::connectMQTT() {
         mqttConnected = true;
         connected = true;
         Serial.println("MQTT connected!");
+        
+        // Subscribe to configuration topics
+        subscribeToConfigTopics();
     } else if (!connected) {
         // Only print failure if we're definitely not connected
         // Suppress failure message on first attempt to avoid confusing novice users
@@ -546,9 +567,142 @@ void ESPRazorBlade::publishConfigurationTimeouts() {
     Serial.println(okHeapMemory ? "OK" : "FAILED");
 }
 
+void ESPRazorBlade::subscribeToConfigTopics() {
+    if (configTopicsSubscribed) {
+        return; // Already subscribed
+    }
+    
+    // Set message callback handler
+    mqttClient.onMessage(onMQTTMessage);
+    
+    // Subscribe to configuration timeout topics
+    char topic[80];
+    bool allSubscribed = true;
+    
+    // WiFi RSSI timeout topic
+    snprintf(topic, sizeof(topic), "%s/config/telemetry/timeouts/wifi_rssi", DEVICE_ID);
+    int result1 = mqttClient.subscribe(topic);
+    Serial.print("Subscribed to ");
+    Serial.print(topic);
+    Serial.println(result1 ? " [OK]" : " [FAILED]");
+    allSubscribed = allSubscribed && result1;
+    
+    // Time alive timeout topic
+    snprintf(topic, sizeof(topic), "%s/config/telemetry/timeouts/time_alive", DEVICE_ID);
+    int result2 = mqttClient.subscribe(topic);
+    Serial.print("Subscribed to ");
+    Serial.print(topic);
+    Serial.println(result2 ? " [OK]" : " [FAILED]");
+    allSubscribed = allSubscribed && result2;
+    
+    // Heap memory timeout topic
+    snprintf(topic, sizeof(topic), "%s/config/telemetry/timeouts/heap_memory", DEVICE_ID);
+    int result3 = mqttClient.subscribe(topic);
+    Serial.print("Subscribed to ");
+    Serial.print(topic);
+    Serial.println(result3 ? " [OK]" : " [FAILED]");
+    allSubscribed = allSubscribed && result3;
+    
+    if (allSubscribed) {
+        configTopicsSubscribed = true;
+        Serial.println("All config topics subscribed successfully");
+    } else {
+        Serial.println("WARNING: Some config topic subscriptions failed");
+    }
+}
+
 String ESPRazorBlade::getIPAddress() {
     if (wifiConnected) {
         return WiFi.localIP().toString();
     }
     return String("");
+}
+
+void ESPRazorBlade::onMQTTMessage(int messageSize) {
+    // Check if instance is valid
+    if (instance == nullptr) {
+        return;
+    }
+    
+    // Get the topic
+    String topic = instance->mqttClient.messageTopic();
+    
+    // Read the message payload
+    String payload = "";
+    while (instance->mqttClient.available()) {
+        payload += (char)instance->mqttClient.read();
+    }
+    
+    Serial.print("MQTT message received: topic=");
+    Serial.print(topic);
+    Serial.print(", payload=");
+    Serial.println(payload);
+    
+    // Handle configuration update
+    instance->handleConfigUpdate(topic.c_str(), payload);
+}
+
+void ESPRazorBlade::handleConfigUpdate(const char* topic, String payload) {
+    // Parse the new timeout value from payload
+    long newTimeout = payload.toInt();
+    
+    // Validate timeout value (must be >= 1000ms and <= 24 hours)
+    if (newTimeout < 1000 || newTimeout > 86400000) {
+        Serial.print("ERROR: Invalid timeout value: ");
+        Serial.print(newTimeout);
+        Serial.println(" (must be between 1000ms and 86400000ms)");
+        return;
+    }
+    
+    // Extract metric name from topic
+    // Topic format: "<device-id>/config/telemetry/timeouts/<metric>"
+    // We need to map config topic to telemetry topic
+    String topicStr = String(topic);
+    String metricName = "";
+    char telemetryTopic[80];
+    
+    if (topicStr.endsWith("/wifi_rssi")) {
+        metricName = "wifi_rssi";
+        snprintf(telemetryTopic, sizeof(telemetryTopic), "%s/telemetry/wifi_rssi", DEVICE_ID);
+    } else if (topicStr.endsWith("/time_alive")) {
+        metricName = "time_alive";
+        snprintf(telemetryTopic, sizeof(telemetryTopic), "%s/telemetry/time_alive", DEVICE_ID);
+    } else if (topicStr.endsWith("/heap_memory")) {
+        metricName = "heap_memory";
+        snprintf(telemetryTopic, sizeof(telemetryTopic), "%s/telemetry/free_heap", DEVICE_ID);
+    } else {
+        Serial.print("ERROR: Unknown config topic: ");
+        Serial.println(topic);
+        return;
+    }
+    
+    // Find the corresponding telemetry entry
+    bool found = false;
+    for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
+        if (telemetryCallbacks[i].active && 
+            strcmp(telemetryCallbacks[i].topic, telemetryTopic) == 0) {
+            // Update the interval
+            unsigned long oldTimeout = telemetryCallbacks[i].intervalMs;
+            telemetryCallbacks[i].intervalMs = (unsigned long)newTimeout;
+            
+            // Reset last execution to trigger immediate publish
+            telemetryCallbacks[i].lastExecution = 0;
+            
+            Serial.print("Config updated: ");
+            Serial.print(metricName);
+            Serial.print(" timeout changed from ");
+            Serial.print(oldTimeout);
+            Serial.print("ms to ");
+            Serial.print(newTimeout);
+            Serial.println("ms (will publish immediately)");
+            
+            found = true;
+            break;
+        }
+    }
+    
+    if (!found) {
+        Serial.print("WARNING: No telemetry entry found for topic: ");
+        Serial.println(telemetryTopic);
+    }
 }

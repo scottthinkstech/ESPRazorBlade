@@ -72,7 +72,7 @@ Launch the ESP32RazorBlade Arduino Library by following an incremental and phase
 
 ## Where We Left Off (2026-02-12)
 
-Phase 9 completed: Device publishes telemetry timeout configuration values to MQTT topics when it connects. Next development task: Phase 11 - subscribe to config topics and hot-reload timeout values when published.
+Phase 11 completed: Device subscribes to config topics and hot-reloads telemetry timeout values when published, with immediate metric re-publish on config change.
 
 ## Phased Development Plan
 
@@ -92,16 +92,23 @@ DELIVERABLES
 + on load, metric timeouts are published to the correct topics [completed]
 
 
-### Phase 11: Hot Load Default Telemetry Metric Timeouts
+### Phase 11: Hot Load Default Telemetry Metric Timeouts [COMPLETED]
 
-After device has started and connected to the MQTT server, subscribe to telemetry configuration topics. As the device is running, update the appropriate configuration value. Example, if "<device-id>/config/telemetry/timeouts/wifi_rssi" gets the value 90000 published, the Wifi RSSI telmetry metric timeout will change from whatever it is currently to 90000. T
+After device has started and connected to the MQTT server, subscribe to telemetry configuration topics. As the device is running, update the appropriate configuration value. Example, if "<device-id>/config/telemetry/timeouts/wifi_rssi" gets the value 90000 published, the Wifi RSSI telmetry metric timeout will change from whatever it is currently to 90000.
 
 METRIC CONFIGURATION
-+ On load, load default metric configuration values from configuration.h
-+ Subscribe to telemetry metric topics
-+ When values are published to the topics, update the corresponding configuration value
-+ Immediately send metric that had configuration value changed (e.g. if wifi rssi timeout was changed, send wifi rssi telemetry metric now)
-+ Use the new configuration value (eg. wifi rssi would publish next metric in 90000 ms)
++ On load, load default metric configuration values from configuration.h [completed]
++ Subscribe to telemetry metric topics [completed]
++ When values are published to the topics, update the corresponding configuration value [completed]
++ Immediately send metric that had configuration value changed (e.g. if wifi rssi timeout was changed, send wifi rssi telemetry metric now) [completed]
++ Use the new configuration value (eg. wifi rssi would publish next metric in 90000 ms) [completed]
 
 DELIVERABLES
-+ when publishing to a telemetry metric topic, the device updates the metric config and begins using it in real time. 
++ when publishing to a telemetry metric topic, the device updates the metric config and begins using it in real time [completed]
+
+IMPLEMENTATION DETAILS
++ Added MQTT subscription to three config topics on connection
++ Static callback handler receives MQTT messages
++ Config parser validates timeout values (1000ms - 24 hours)
++ Telemetry intervals updated dynamically
++ Immediate metric publish triggered by resetting lastExecution to 0 
