@@ -4,6 +4,8 @@
 #include <WiFi.h>
 #include <ArduinoMqttClient.h>
 #include <Arduino.h>
+// Use quotes so the compiler searches the sketch directory first.
+// This ensures each sketch uses its own Configuration.h.
 #include "Configuration.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -116,6 +118,7 @@ private:
     bool mqttConnecting;  // Flag to prevent overlapping connection attempts
     unsigned long wifiConnectedTime;  // Timestamp when WiFi first connected
     bool firstMQTTAttempt;  // Flag to track first MQTT connection attempt (for silent retry)
+    bool resetReasonPublished;  // Flag for one-time reset reason publish on boot
     
     // Telemetry callback structure
     struct TelemetryEntry {
@@ -138,6 +141,7 @@ private:
     void connectWiFi();
     void connectMQTT();
     void processTelemetry();  // Process registered telemetry callbacks
+    void publishBootTelemetry();  // One-time status and reset reason on MQTT connect
 };
 
 #endif // ESPRAZORBLADE_H

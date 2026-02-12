@@ -13,8 +13,8 @@
  * 3. Upload and open Serial Monitor at 115200 baud
  */
 
-#include "ESPRazorBlade.h"
 #include "Configuration.h"
+#include "ESPRazorBlade.h"
 
 ESPRazorBlade razorBlade;
 

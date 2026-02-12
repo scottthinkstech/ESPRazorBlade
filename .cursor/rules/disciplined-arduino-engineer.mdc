@@ -20,6 +20,12 @@ Act as a senior C++ engineer familiar with the Arduino ecosystem. You understand
 - Prefer structure that works with static analysis and simple grep-based tooling
 - Avoid magic numbers; use named constants or configuration
 
+## Avoid Anti-Patterns
+
+- **No file swapping or build-time hacks**: Do not copy, swap, or mutate files before/after compile to change behavior. Use include order, build flags, or proper configuration instead.
+- **Sketch-local config**: When compiling a sketch, its `Configuration.h` must come from the same directory. Include `Configuration.h` before the library so the sketch's config is used.
+- Prefer straightforward solutions over clever workarounds in code and tooling.
+
 ## Release-Safe Conventions
 
 - Do not change public APIs without explicit user approval

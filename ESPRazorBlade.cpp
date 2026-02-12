@@ -1,4 +1,47 @@
 #include "ESPRazorBlade.h"
+#include "esp_system.h"
+
+#ifndef DEVICE_ID
+#define DEVICE_ID "ESPRazorBlade"
+#endif
+#ifndef WIFI_SIGNAL_INTERVAL_MS
+#define WIFI_SIGNAL_INTERVAL_MS 30000
+#endif
+#ifndef TIME_ALIVE_INTERVAL_MS
+#define TIME_ALIVE_INTERVAL_MS 60000
+#endif
+
+// Built-in telemetry callback helpers (static, used by registerTelemetry)
+static String readWiFiRSSI() {
+    return String(WiFi.RSSI());
+}
+
+static String readTimeAlive() {
+    unsigned long totalSec = millis() / 1000UL;
+    unsigned int hours = (unsigned int)(totalSec / 3600UL);
+    unsigned int minutes = (unsigned int)((totalSec % 3600UL) / 60UL);
+    unsigned int seconds = (unsigned int)(totalSec % 60UL);
+    char buf[11];
+    snprintf(buf, sizeof(buf), "%03uh%02um%02us", hours, minutes, seconds);
+    return String(buf);
+}
+
+static const char* getResetReasonString() {
+    switch (esp_reset_reason()) {
+        case ESP_RST_UNKNOWN:   return "Unknown";
+        case ESP_RST_POWERON:   return "PowerOn";
+        case ESP_RST_EXT:       return "ExtPin";
+        case ESP_RST_SW:        return "Reboot";
+        case ESP_RST_PANIC:     return "Crash";
+        case ESP_RST_INT_WDT:   return "WDT_Int";
+        case ESP_RST_TASK_WDT:  return "WDT_Task";
+        case ESP_RST_WDT:       return "WDT_Other";
+        case ESP_RST_DEEPSLEEP: return "Sleep";
+        case ESP_RST_BROWNOUT:  return "BrownOut";
+        case ESP_RST_SDIO:      return "SDIO";
+        default:                return "Unknown";
+    }
+}
 
 // WiFi connection settings
 const int WIFI_MAX_RETRIES = 20;
@@ -29,7 +72,8 @@ ESPRazorBlade::ESPRazorBlade()
       mqttConnecting(false),
       wifiConnectedTime(0),
       firstMQTTAttempt(true),
-      telemetryCallbackCount(0) {
+      telemetryCallbackCount(0),
+      resetReasonPublished(false) {
     // Initialize telemetry callback array
     for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
         telemetryCallbacks[i].active = false;
@@ -102,6 +146,10 @@ bool ESPRazorBlade::begin() {
         return false;
     }
     
+    // Register built-in telemetry (WiFi RSSI, time alive)
+    registerTelemetry(DEVICE_ID "/telemetry/wifi_rssi", readWiFiRSSI, WIFI_SIGNAL_INTERVAL_MS);
+    registerTelemetry(DEVICE_ID "/telemetry/time_alive", readTimeAlive, TIME_ALIVE_INTERVAL_MS);
+
     Serial.println("ESPRazorBlade initialized successfully");
     Serial.println("WiFi and MQTT connection tasks started");
     return true;
@@ -418,6 +466,9 @@ void ESPRazorBlade::processTelemetry() {
     if (!mqttConnected || !mqttClient.connected()) {
         return; // Don't process telemetry if MQTT is not connected
     }
+
+    // One-time publish of status and reset reason when MQTT first connects
+    publishBootTelemetry();
     
     unsigned long now = millis();
     
@@ -435,13 +486,32 @@ void ESPRazorBlade::processTelemetry() {
             // Execute callback and publish result
             String value = telemetryCallbacks[i].callback();
             
-            if (publish(telemetryCallbacks[i].topic, value.c_str())) {
-                // Update last execution time
+            bool ok = publish(telemetryCallbacks[i].topic, value.c_str());
+            if (ok) {
                 telemetryCallbacks[i].lastExecution = now;
             }
-            // If publish fails, we'll retry on next interval (don't update lastExecution)
+            Serial.print("Telemetry published: ");
+            Serial.print(telemetryCallbacks[i].topic);
+            Serial.print(" = ");
+            Serial.print(value);
+            Serial.println(ok ? "" : " [FAILED]");
         }
     }
+}
+
+void ESPRazorBlade::publishBootTelemetry() {
+    if (resetReasonPublished) {
+        return;
+    }
+    bool okStatus = publish(DEVICE_ID "/status", "online", true);
+    bool okReset = publish(DEVICE_ID "/telemetry/reset_reason", getResetReasonString(), true);
+    if (okStatus) {
+        resetReasonPublished = true;
+    }
+    Serial.print("Boot telemetry published: status=");
+    Serial.print(okStatus ? "OK" : "FAILED");
+    Serial.print(", reset_reason=");
+    Serial.println(okReset ? "OK" : "FAILED");
 }
 
 String ESPRazorBlade::getIPAddress() {
