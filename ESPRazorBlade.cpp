@@ -10,10 +10,17 @@
 #ifndef TIME_ALIVE_INTERVAL_MS
 #define TIME_ALIVE_INTERVAL_MS 60000
 #endif
+#ifndef FREE_HEAP_INTERVAL_MS
+#define FREE_HEAP_INTERVAL_MS 30000
+#endif
 
 // Built-in telemetry callback helpers (static, used by registerTelemetry)
 static String readWiFiRSSI() {
     return String(WiFi.RSSI());
+}
+
+static String readFreeHeap() {
+    return String(ESP.getFreeHeap());
 }
 
 static String readTimeAlive() {
@@ -146,9 +153,10 @@ bool ESPRazorBlade::begin() {
         return false;
     }
     
-    // Register built-in telemetry (WiFi RSSI, time alive)
+    // Register built-in telemetry (WiFi RSSI, time alive, free heap)
     registerTelemetry(DEVICE_ID "/telemetry/wifi_rssi", readWiFiRSSI, WIFI_SIGNAL_INTERVAL_MS);
     registerTelemetry(DEVICE_ID "/telemetry/time_alive", readTimeAlive, TIME_ALIVE_INTERVAL_MS);
+    registerTelemetry(DEVICE_ID "/telemetry/free_heap", readFreeHeap, FREE_HEAP_INTERVAL_MS);
 
     Serial.println("ESPRazorBlade initialized successfully");
     Serial.println("WiFi and MQTT connection tasks started");

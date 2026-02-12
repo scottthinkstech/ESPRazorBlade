@@ -5,8 +5,8 @@
  * 2) Fill in WiFi/MQTT settings and DEVICE_ID
  * 3) Upload to your board and open Serial Monitor at 115200 baud
  *
- * The library provides built-in telemetry: WiFi RSSI, time alive, reset reason,
- * and status. Use registerTelemetry() to add your own metrics.
+ * The library provides built-in telemetry: WiFi RSSI, time alive, free heap,
+ * reset reason, and status. Use registerTelemetry() to add your own metrics.
  */
 
 // Include Configuration.h first so the library uses this directory's config.

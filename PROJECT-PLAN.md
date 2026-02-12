@@ -67,6 +67,11 @@ Launch the ESP32RazorBlade Arduino Library by following an incremental and phase
 + Publish callbacks established so users can register their own callback for publishing updates to MQTT host
 + Basic deployment scripts exist (needs refined, more definition when we come to this phase)
 + Test harness (exists, but is not working, requirements will be defined when we come to this task)
++ Default telemetry metrics working: WiFi RSSI, time alive, reset reason (broadcast to MQTT when connected)
+
+## Where We Left Off (2025-02-11)
+
+Default telemetry metrics (WiFi RSSI, time alive, reset reason) are working. Next development task: add heap memory telemetry metric.
 
 ## Phased Development Plan
 
