@@ -15,6 +15,7 @@ ESPRazorBlade razorBlade;
 const char* TOPIC_STATUS = DEVICE_ID "/status";
 const char* TOPIC_HEARTBEAT = DEVICE_ID "/telemetry/heartbeat";
 const char* TOPIC_RSSI = DEVICE_ID "/telemetry/wifi_rssi";
+const char* TOPIC_TIME_ALIVE = DEVICE_ID "/telemetry/time_alive";
 
 const unsigned long STATUS_PRINT_INTERVAL_MS = 5000;
 const unsigned long HEARTBEAT_INTERVAL_MS = 15000;
@@ -24,6 +25,16 @@ unsigned long lastHeartbeatMs = 0;
 
 String readWiFiRSSI() {
     return String(WiFi.RSSI());
+}
+
+String readTimeAlive() {
+    unsigned long totalSec = millis() / 1000UL;
+    unsigned int hours = (unsigned int)(totalSec / 3600UL);
+    unsigned int minutes = (unsigned int)((totalSec % 3600UL) / 60UL);
+    unsigned int seconds = (unsigned int)(totalSec % 60UL);
+    char buf[11];  // "000h00m00s" + null
+    snprintf(buf, sizeof(buf), "%03uh%02um%02us", hours, minutes, seconds);
+    return String(buf);
 }
 
 void setup() {
@@ -43,6 +54,7 @@ void setup() {
 
     // Register WiFi signal strength telemetry (interval from Configuration.h).
     razorBlade.registerTelemetry(TOPIC_RSSI, readWiFiRSSI, WIFI_SIGNAL_INTERVAL_MS);
+    razorBlade.registerTelemetry(TOPIC_TIME_ALIVE, readTimeAlive, TIME_ALIVE_INTERVAL_MS);
 
     // Retained status helps dashboards know the latest device state.
     razorBlade.publish(TOPIC_STATUS, "online", true);

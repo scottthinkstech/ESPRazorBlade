@@ -18,5 +18,6 @@
 // Telemetry Configuration (intervals in milliseconds)
 #define DEVICE_ID "ESPRazorBlade_01"           // MQTT topic prefix
 #define WIFI_SIGNAL_INTERVAL_MS 30000          // Publish WiFi RSSI every 30 seconds
+#define TIME_ALIVE_INTERVAL_MS 60000           // Publish time alive every 60 seconds
 
 #endif // CONFIGURATION_H
