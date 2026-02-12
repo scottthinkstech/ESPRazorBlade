@@ -80,7 +80,8 @@ ESPRazorBlade::ESPRazorBlade()
       wifiConnectedTime(0),
       firstMQTTAttempt(true),
       telemetryCallbackCount(0),
-      resetReasonPublished(false) {
+      resetReasonPublished(false),
+      configTimeoutsPublished(false) {
     // Initialize telemetry callback array
     for (int i = 0; i < MAX_TELEMETRY_CALLBACKS; i++) {
         telemetryCallbacks[i].active = false;
@@ -255,6 +256,8 @@ void ESPRazorBlade::mqttTask(void* parameter) {
             instance->mqttConnecting = false; // Clear connecting flag when WiFi disconnects
             instance->wifiConnectedTime = 0; // Reset WiFi connection time
             instance->firstMQTTAttempt = true; // Reset for next WiFi connection
+            instance->resetReasonPublished = false; // Reset for next MQTT connection
+            instance->configTimeoutsPublished = false; // Reset for next MQTT connection
         }
         
         // Small delay to prevent tight loop
@@ -478,6 +481,9 @@ void ESPRazorBlade::processTelemetry() {
     // One-time publish of status and reset reason when MQTT first connects
     publishBootTelemetry();
     
+    // One-time publish of configuration timeouts when MQTT first connects
+    publishConfigurationTimeouts();
+    
     unsigned long now = millis();
     
     // Process each active telemetry callback
@@ -520,6 +526,24 @@ void ESPRazorBlade::publishBootTelemetry() {
     Serial.print(okStatus ? "OK" : "FAILED");
     Serial.print(", reset_reason=");
     Serial.println(okReset ? "OK" : "FAILED");
+}
+
+void ESPRazorBlade::publishConfigurationTimeouts() {
+    if (configTimeoutsPublished) {
+        return;
+    }
+    bool okWifiRssi = publish(DEVICE_ID "/config/telemetry/timeouts/wifi_rssi", (long)WIFI_SIGNAL_INTERVAL_MS, true);
+    bool okTimeAlive = publish(DEVICE_ID "/config/telemetry/timeouts/time_alive", (long)TIME_ALIVE_INTERVAL_MS, true);
+    bool okHeapMemory = publish(DEVICE_ID "/config/telemetry/timeouts/heap_memory", (long)FREE_HEAP_INTERVAL_MS, true);
+    if (okWifiRssi && okTimeAlive && okHeapMemory) {
+        configTimeoutsPublished = true;
+    }
+    Serial.print("Configuration timeouts published: wifi_rssi=");
+    Serial.print(okWifiRssi ? "OK" : "FAILED");
+    Serial.print(", time_alive=");
+    Serial.print(okTimeAlive ? "OK" : "FAILED");
+    Serial.print(", heap_memory=");
+    Serial.println(okHeapMemory ? "OK" : "FAILED");
 }
 
 String ESPRazorBlade::getIPAddress() {

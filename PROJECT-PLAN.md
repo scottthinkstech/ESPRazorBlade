@@ -67,33 +67,34 @@ Launch the ESP32RazorBlade Arduino Library by following an incremental and phase
 + Publish callbacks established so users can register their own callback for publishing updates to MQTT host
 + Basic deployment scripts exist (needs refined, more definition when we come to this phase)
 + Test harness (exists, but is not working, requirements will be defined when we come to this task)
-+ Default telemetry metrics working: WiFi RSSI, time alive, reset reason (broadcast to MQTT when connected)
++ Default telemetry metrics working: WiFi RSSI, time alive, free heap, reset reason (broadcast to MQTT when connected)
++ Telemetry timeout configuration values movable to Configuration.h and published to MQTT on connect (Phase 9 complete)
 
-## Where We Left Off (2025-02-11)
+## Where We Left Off (2026-02-12)
 
-Default telemetry metrics (WiFi RSSI, time alive, reset reason) are working. Next development task: add heap memory telemetry metric.
+Phase 9 completed: Device publishes telemetry timeout configuration values to MQTT topics when it connects. Next development task: Phase 11 - subscribe to config topics and hot-reload timeout values when published.
 
 ## Phased Development Plan
 
-### Phase 9: Publish Default Telemetry Metric Timeouts on Start
+### Phase 9: Publish Default Telemetry Metric Timeouts on Start [COMPLETED]
 
 When the device starts, publish timeout values assigned to default telemetry to the MQTT server.
 
 METRIC TIMEOUT PUBLISH
 + WiFi Signal Telemetry 
-    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/timeout/wifi_rssi"
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/telemetry/timeouts/wifi_rssi" [completed]
 + Time Alive Telemetry
-    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/timeout/time_alive"
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/telemetry/timeouts/time_alive" [completed]
 + Free Heap Memrory
-    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/heap_memory"
+    - On MQTT connection, publish timeout in millisecond to topic "<device-id>/config/telemetry/timeouts/heap_memory" [completed]
 
 DELIVERABLES
-+ on load, metric timeouts are published to the correct topics
++ on load, metric timeouts are published to the correct topics [completed]
 
 
 ### Phase 11: Hot Load Default Telemetry Metric Timeouts
 
-After device has started and connected to the MQTT server, subscribe to telemetry configuration topics. As the device is running, update the appropriate configuration value. Example, if "<device-id>/config/timeout/wifi_rssi" gets the value 90000 published, the Wifi RSSI telmetry metric timeout will change from whatever it is currently to 90000. T
+After device has started and connected to the MQTT server, subscribe to telemetry configuration topics. As the device is running, update the appropriate configuration value. Example, if "<device-id>/config/telemetry/timeouts/wifi_rssi" gets the value 90000 published, the Wifi RSSI telmetry metric timeout will change from whatever it is currently to 90000. T
 
 METRIC CONFIGURATION
 + On load, load default metric configuration values from configuration.h

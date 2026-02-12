@@ -119,6 +119,7 @@ private:
     unsigned long wifiConnectedTime;  // Timestamp when WiFi first connected
     bool firstMQTTAttempt;  // Flag to track first MQTT connection attempt (for silent retry)
     bool resetReasonPublished;  // Flag for one-time reset reason publish on boot
+    bool configTimeoutsPublished;  // Flag for one-time config timeout publish on MQTT connect
     
     // Telemetry callback structure
     struct TelemetryEntry {
@@ -142,6 +143,7 @@ private:
     void connectMQTT();
     void processTelemetry();  // Process registered telemetry callbacks
     void publishBootTelemetry();  // One-time status and reset reason on MQTT connect
+    void publishConfigurationTimeouts();  // One-time config timeout publish on MQTT connect
 };
 
 #endif // ESPRAZORBLADE_H
