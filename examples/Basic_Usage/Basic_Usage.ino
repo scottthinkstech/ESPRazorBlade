@@ -14,8 +14,6 @@ ESPRazorBlade razorBlade;
 // DEVICE_ID comes from Configuration.h and is used as the MQTT topic prefix.
 const char* TOPIC_STATUS = DEVICE_ID "/status";
 const char* TOPIC_HEARTBEAT = DEVICE_ID "/telemetry/heartbeat";
-const char* TOPIC_UPTIME = DEVICE_ID "/telemetry/uptime_s";
-const char* TOPIC_HEAP = DEVICE_ID "/telemetry/free_heap";
 const char* TOPIC_RSSI = DEVICE_ID "/telemetry/wifi_rssi";
 
 const unsigned long STATUS_PRINT_INTERVAL_MS = 5000;
@@ -23,14 +21,6 @@ const unsigned long HEARTBEAT_INTERVAL_MS = 15000;
 
 unsigned long lastStatusPrintMs = 0;
 unsigned long lastHeartbeatMs = 0;
-
-String readUptimeSeconds() {
-    return String(millis() / 1000UL);
-}
-
-String readFreeHeapBytes() {
-    return String(ESP.getFreeHeap());
-}
 
 String readWiFiRSSI() {
     return String(WiFi.RSSI());
@@ -51,9 +41,7 @@ void setup() {
         }
     }
 
-    // Register built-in telemetry examples.
-    razorBlade.registerTelemetry(TOPIC_UPTIME, readUptimeSeconds, UPTIME_INTERVAL_MS);
-    razorBlade.registerTelemetry(TOPIC_HEAP, readFreeHeapBytes, HEAP_MEMORY_INTERVAL_MS);
+    // Register WiFi signal strength telemetry (interval from Configuration.h).
     razorBlade.registerTelemetry(TOPIC_RSSI, readWiFiRSSI, WIFI_SIGNAL_INTERVAL_MS);
 
     // Retained status helps dashboards know the latest device state.

@@ -8,3 +8,5 @@ scripts/
 build/
 
 examples/DevelopmentExample/
+
+.arduino-build/
