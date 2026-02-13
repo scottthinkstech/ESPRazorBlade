@@ -19,82 +19,107 @@ class ESPRazorBlade;
 typedef String (*TelemetryCallback)();
 
 /**
- * ESPRazorBlade Library - Phase 5: WiFi + MQTT + Publish + Telemetry
+ * @brief ESPRazorBlade Library - Lightweight MQTT telemetry for ESP32 devices
  * 
- * Lightweight library for ESP32 devices.
- * Phase 5 Features:
+ * Provides resilient WiFi and MQTT connectivity with automatic telemetry publishing.
+ * 
+ * Features:
  * - Resilient WiFi connection with automatic reconnection
  * - MQTT broker connection with automatic reconnection
  * - MQTT publish functionality with thread-safe operations
- * - Telemetry callback system for automatic data publishing
+ * - Built-in system telemetry (WiFi RSSI, uptime, free heap)
+ * - Custom telemetry callback system for sensor data
+ * - Runtime configuration updates via MQTT
  * - RTOS-based non-blocking operation
  */
 class ESPRazorBlade {
 public:
     /**
-     * Constructor
+     * @brief Constructor
      */
     ESPRazorBlade();
     
     /**
-     * Destructor
+     * @brief Destructor
      */
     ~ESPRazorBlade();
     
     /**
-     * Initialize the library
-     * Starts WiFi and MQTT connection tasks
+     * @brief Initialize the library
+     * 
+     * Starts WiFi and MQTT connection tasks and registers built-in telemetry metrics.
+     * Built-in metrics include WiFi RSSI, device uptime, free heap memory, reset reason,
+     * and device online status.
+     * 
      * @return true if initialization successful
      */
     bool begin();
     
     /**
-     * Check if WiFi is connected
-     * @return true if connected
+     * @brief Check if WiFi is connected
+     * @return true if connected, false otherwise
      */
     bool isWiFiConnected();
     
     /**
-     * Check if MQTT is connected
-     * @return true if connected
+     * @brief Check if MQTT is connected
+     * @return true if connected, false otherwise
      */
     bool isMQTTConnected();
     
     /**
-     * Get current WiFi IP address
-     * @return IP address as String
+     * @brief Get current WiFi IP address
+     * @return IP address as String, or empty string if not connected
      */
     String getIPAddress();
     
     /**
-     * Publish a message to an MQTT topic
-     * @param topic MQTT topic
+     * @brief Publish a message to an MQTT topic
+     * @param topic MQTT topic path
      * @param payload Message payload (string)
-     * @param retained Whether to retain the message (default: false)
-     * @return true if publish successful
+     * @param retained Whether to retain the message on the broker (default: false)
+     * @return true if publish successful, false otherwise
      */
     bool publish(const char* topic, const char* payload, bool retained = false);
     
     /**
-     * Publish a numeric value to an MQTT topic
-     * @param topic MQTT topic
-     * @param value Numeric value
-     * @param retained Whether to retain the message (default: false)
-     * @return true if publish successful
+     * @brief Publish a float value to an MQTT topic
+     * @param topic MQTT topic path
+     * @param value Float value to publish
+     * @param retained Whether to retain the message on the broker (default: false)
+     * @return true if publish successful, false otherwise
      */
     bool publish(const char* topic, float value, bool retained = false);
+    
+    /**
+     * @brief Publish an integer value to an MQTT topic
+     * @param topic MQTT topic path
+     * @param value Integer value to publish
+     * @param retained Whether to retain the message on the broker (default: false)
+     * @return true if publish successful, false otherwise
+     */
     bool publish(const char* topic, int value, bool retained = false);
+    
+    /**
+     * @brief Publish a long integer value to an MQTT topic
+     * @param topic MQTT topic path
+     * @param value Long integer value to publish
+     * @param retained Whether to retain the message on the broker (default: false)
+     * @return true if publish successful, false otherwise
+     */
     bool publish(const char* topic, long value, bool retained = false);
     
     /**
-     * Register a telemetry callback function
+     * @brief Register a custom telemetry callback function
+     * 
      * The callback will be executed at the specified interval and its return value
-     * will be published to the given MQTT topic.
+     * will be published to the given MQTT topic. This is for custom metrics only;
+     * built-in system metrics (WiFi RSSI, uptime, heap) are registered automatically.
      * 
      * @param topic MQTT topic to publish to
      * @param callback Function that returns a String to publish
      * @param intervalMs Interval in milliseconds between executions
-     * @return true if registration successful (false if max callbacks reached)
+     * @return true if registration successful, false if max callbacks reached (limit: 10 total)
      */
     bool registerTelemetry(const char* topic, TelemetryCallback callback, unsigned long intervalMs);
 

@@ -116,7 +116,7 @@ bool ESPRazorBlade::begin() {
     Serial.begin(115200);
     delay(100); // Give Serial time to initialize
     
-    Serial.println("\n=== ESPRazorBlade Library - Phase 5: WiFi + MQTT + Publish + Telemetry ===");
+    Serial.println("\n=== ESPRazorBlade Library - WiFi + MQTT + Telemetry ===");
     
     // Create mutex for thread-safe MQTT operations
     mqttMutex = xSemaphoreCreateMutex();

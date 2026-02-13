@@ -1,4 +1,4 @@
-# ESPRazorBlade
+V# ESPRazorBlade
 
 Lightweight Arduino library for ESP32 devices to broadcast device telemetry and sensor data via MQTT.
 
@@ -40,7 +40,7 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 2. Open `ESPRazorBlade.ino` or an example sketch in Arduino IDE
 3. Copy `Configuration.h.example` to `Configuration.h` in the same directory
 4. Edit `Configuration.h` with your WiFi credentials
-5. Install ESP32 board support (see [Arduino IDE Guide](ARDUINO_IDE_GUIDE.md))d
+5. Install ESP32 board support (see [Arduino IDE Guide](ARDUINO_IDE_GUIDE.md))
 6. Select your board and upload!
 
 **Note**: `Configuration.h` is gitignored - your credentials stay local.
@@ -54,6 +54,7 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 5. Add your WiFi credentials
 
 **Available examples:**
+- `Basic_Usage` - Minimal setup with built-in telemetry
 - `Basic_MQTT_NoAuth` - Simple MQTT without authentication
 - `MQTT_With_Auth` - Secure MQTT with username/password
 
@@ -62,6 +63,7 @@ See [ARDUINO_IDE_GUIDE.md](ARDUINO_IDE_GUIDE.md) for detailed instructions.
 ## Quick Start
 
 > **👉 See complete, ready-to-use examples in the [`examples/`](examples/) directory:**
+> - **[Basic_Usage](examples/Basic_Usage/)** - Minimal setup with built-in telemetry
 > - **[Basic_MQTT_NoAuth](examples/Basic_MQTT_NoAuth/)** - Simple MQTT without authentication
 > - **[MQTT_With_Auth](examples/MQTT_With_Auth/)** - Secure MQTT with username/password
 
@@ -266,6 +268,22 @@ Your device will:
 
 No restart required!
 
+## Security Best Practices
+
+**⚠️ Important Security Notes:**
+
+- **Credentials Protection**: Your WiFi and MQTT credentials are stored in `Configuration.h`, which is automatically gitignored to prevent accidental commits
+- **Never commit Configuration.h**: Always use `Configuration.h.example` as a template. Copy it to `Configuration.h` locally and keep your actual credentials out of version control
+- **Use MQTT Authentication**: For production deployments, always enable MQTT username/password authentication by defining `MQTT_USERNAME` and `MQTT_PASSWORD`
+- **Network Security**: This library currently transmits data in plaintext. For sensitive applications, use a secured local network or VPN
+- **Future Enhancement**: TLS/SSL support for encrypted MQTT connections is planned for a future release
+
+**Best Practice Workflow:**
+1. Copy `Configuration.h.example` to `Configuration.h`
+2. Edit `Configuration.h` with your real credentials (local only)
+3. Never add `Configuration.h` to git (already gitignored)
+4. Share `Configuration.h.example` with placeholder values for others
+
 ## Built-in Telemetry
 
 The library automatically publishes system metrics when you call `begin()`. No additional code required!
@@ -374,8 +392,49 @@ If multiple boards are connected, specify the target serial device:
 
 ### Troubleshooting
 
-- If upload fails with serial port permission errors (for example, `/dev/ttyACM* is not readable`), add your user to the serial-access group (`uucp`/`dialout`, distro dependent), then reconnect the board.
-- If build directory permissions are wrong, the script falls back to `/tmp/esprazorblade-basic-usage-build`.
+#### Upload and Compilation Issues
+- **Serial port permission errors** (e.g., `/dev/ttyACM* is not readable`): Add your user to the serial-access group (`uucp` or `dialout`, depending on your distro), then reconnect the board
+- **Build directory permissions**: The script automatically falls back to `/tmp/esprazorblade-basic-usage-build` if permissions fail
+- **Compilation errors about missing Configuration.h**: Copy `Configuration.h.example` to `Configuration.h` in your sketch directory
+
+#### WiFi Connection Issues
+- **WiFi not connecting**: 
+  - Verify SSID and password are correct in `Configuration.h`
+  - Check that your WiFi network is 2.4GHz (ESP32 does not support 5GHz networks)
+  - Ensure WiFi signal strength is adequate (RSSI should be better than -80 dBm)
+  - Try moving the device closer to your router
+- **Frequent WiFi disconnects**: 
+  - Check power supply - insufficient power can cause WiFi instability
+  - Monitor RSSI values in telemetry - weak signal causes disconnections
+
+#### MQTT Connection Issues
+- **MQTT broker unreachable**:
+  - Verify `MQTT_BROKER` IP address is correct
+  - Check that MQTT broker is running (test with `mosquitto_sub` or similar)
+  - Ensure firewall allows connection to MQTT port (default: 1883)
+  - Verify device and broker are on the same network or have routing between them
+- **MQTT authentication failures**:
+  - Double-check `MQTT_USERNAME` and `MQTT_PASSWORD` are correct
+  - Ensure authentication is enabled on your MQTT broker
+  - If not using auth, leave `MQTT_USERNAME` and `MQTT_PASSWORD` commented out
+- **MQTT connects but immediately disconnects**:
+  - Check for duplicate `MQTT_CLIENT_ID` - each device needs a unique ID
+  - Verify MQTT broker max connections limit not reached
+
+#### Serial Monitor Issues
+- **No serial output or garbled text**: 
+  - Ensure baud rate is set to **115200** in Serial Monitor
+  - Try pressing the reset button on the board after opening Serial Monitor
+  - Check USB cable supports data transfer (not power-only cable)
+
+#### Memory Issues
+- **Device crashes or reboots randomly**:
+  - Monitor free heap via telemetry - crashes often indicate low memory
+  - Reduce number of custom telemetry callbacks if heap is consistently low
+  - Check for memory leaks in custom callback functions
+- **Stack overflow errors**:
+  - Avoid large local arrays in callback functions
+  - Use heap allocation sparingly and always free allocated memory
 
 ## API Reference
 
@@ -463,12 +522,46 @@ The library uses FreeRTOS tasks for non-blocking operation:
 - **MQTT Task**: Handles MQTT connection, keepalive, and telemetry publishing
 - **Main Loop**: Your code runs independently without blocking
 
-## Requirements
+## Known Limitations (Beta Release)
 
-- ESP32 board (any variant)
-- Arduino IDE 2.x or 1.8.x
-- ESP32 Arduino Core (install via Board Manager)
-- **ArduinoMqttClient library** (install via Library Manager) - Required for Phase 2+
+**Beta Software Notice**: This is a beta release. While the core functionality is stable, you may encounter edge cases or issues. Please report any problems via GitHub Issues.
+
+**Current Limitations:**
+- **No TLS/SSL Support**: MQTT connections are unencrypted. Use on trusted networks only. TLS/SSL support planned for future release.
+- **Plaintext Credentials**: WiFi and MQTT credentials stored in plaintext in `Configuration.h`. Keep this file local and never commit it.
+- **Maximum Callbacks**: Up to 10 total telemetry callbacks (includes 3 built-in metrics, leaving 7 for custom telemetry).
+- **Configuration Timeout Ranges**: Valid telemetry interval range is 1000ms (1 second) to 86400000ms (24 hours).
+
+**Tested Hardware:**
+- ✅ ESP32-C3 (primary development target, fully tested)
+- ✅ ESP32-C6 (basic testing completed)
+- ✅ ESP32-S3 (basic testing completed)
+- ⚠️ Classic ESP32 (should work, not extensively tested)
+
+**Memory Requirements:**
+- Minimum RAM: ~50KB free heap recommended for stable operation
+- Flash usage: ~300-400KB (varies with ESP32 variant and build options)
+- Monitor free heap via telemetry to ensure adequate memory
+
+**Future Enhancements (Post-Beta):**
+- TLS/SSL encryption for MQTT
+- Arduino Library Manager distribution
+- Additional sensor integration examples
+- Power management / deep sleep examples
+
+## Hardware Requirements
+
+- **ESP32 Board**: Any ESP32 variant (ESP32, ESP32-C3, ESP32-C6, ESP32-S3)
+- **RAM**: Minimum 50KB free heap for stable operation
+- **Flash**: ~400KB program storage (varies by variant and features)
+- **WiFi**: 2.4GHz network (ESP32 does not support 5GHz)
+- **Power**: Stable 3.3V supply (USB or regulated power recommended)
+
+## Software Requirements
+
+- **Arduino IDE**: 2.x or 1.8.x
+- **ESP32 Arduino Core**: Install via Board Manager
+- **ArduinoMqttClient library**: Install via Library Manager (Tools → Manage Libraries → Search "ArduinoMqttClient")
 
 ## Board Setup
 
