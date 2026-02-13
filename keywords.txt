@@ -1,0 +1,21 @@
+#######################################
+# Syntax Coloring Map For ESPRazorBlade
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ESPRazorBlade	KEYWORD1
+TelemetryCallback	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+publish	KEYWORD2
+registerTelemetry	KEYWORD2
+isWiFiConnected	KEYWORD2
+isMQTTConnected	KEYWORD2
+getIPAddress	KEYWORD2
