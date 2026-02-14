@@ -585,4 +585,4 @@ Use baud rate **115200** to see connection status and debug messages.
 
 ## Contributing
 
-[Add contribution guidelines here]
+Contributions are welcome! Please ensure all examples compile without errors and follow Arduino library conventions.
