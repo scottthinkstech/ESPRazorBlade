@@ -1,4 +1,4 @@
-V# ESPRazorBlade
+# ESPRazorBlade
 
 Lightweight Arduino library for ESP32 devices to broadcast device telemetry and sensor data via MQTT.
 
@@ -34,35 +34,41 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 
 ## Installation
 
-### Option 1: Arduino IDE (Recommended)
+### Option 1: Arduino Library Manager (when published)
 
-1. Download or clone this repository
-2. Open `ESPRazorBlade.ino` or an example sketch in Arduino IDE
-3. Copy `Configuration.h.example` to `Configuration.h` in the same directory
-4. Edit `Configuration.h` with your WiFi credentials
-5. Install ESP32 board support (see [Arduino IDE Guide](ARDUINO_IDE_GUIDE.md))
-6. Select your board and upload!
+1. Arduino IDE → Tools → Manage Libraries
+2. Search "ESPRazorBlade" → Install
+3. File → Examples → ESPRazorBlade → [Choose an example]
+4. Copy `Configuration.h.example` to `Configuration.h` in the example folder
+5. Edit `Configuration.h` with your WiFi credentials
+6. Install ESP32 board support and ArduinoMqttClient (see Board Setup and Software Requirements below)
+7. Select your board and upload!
+
+### Option 2: Manual Install
+
+1. Download the library (ZIP from GitHub releases, or clone the repository)
+2. Copy the `ESPRazorBlade` folder to your Arduino `libraries` directory:
+   - **Linux**: `~/Arduino/libraries/`
+   - **macOS**: `~/Documents/Arduino/libraries/`
+   - **Windows**: `Documents\Arduino\libraries\`
+3. Restart Arduino IDE
+4. File → Examples → ESPRazorBlade → [Choose an example]
+5. Copy `Configuration.h.example` to `Configuration.h` in the example folder
+6. Edit `Configuration.h` with your WiFi credentials
+7. Select your board and upload!
 
 **Note**: `Configuration.h` is gitignored - your credentials stay local.
 
-### Option 2: As Arduino Library
-
-1. Copy the `ESPRazorBlade` folder to your Arduino `libraries` directory
-2. Restart Arduino IDE
-3. File → Examples → ESPRazorBlade → [Choose an example]
-4. Copy `Configuration.h.example` to `Configuration.h` in the example folder
-5. Add your WiFi credentials
-
 **Available examples:**
+- `Ping_Test` - Hardware verification (no Configuration.h needed; start here if troubleshooting)
 - `Basic_Usage` - Minimal setup with built-in telemetry
 - `Basic_MQTT_NoAuth` - Simple MQTT without authentication
 - `MQTT_With_Auth` - Secure MQTT with username/password
 
-See [ARDUINO_IDE_GUIDE.md](ARDUINO_IDE_GUIDE.md) for detailed instructions.
-
 ## Quick Start
 
 > **👉 See complete, ready-to-use examples in the [`examples/`](examples/) directory:**
+> - **[Ping_Test](examples/Ping_Test/)** - Hardware verification (no config needed)
 > - **[Basic_Usage](examples/Basic_Usage/)** - Minimal setup with built-in telemetry
 > - **[Basic_MQTT_NoAuth](examples/Basic_MQTT_NoAuth/)** - Simple MQTT without authentication
 > - **[MQTT_With_Auth](examples/MQTT_With_Auth/)** - Secure MQTT with username/password
@@ -185,7 +191,7 @@ void loop() {
 }
 ```
 
-#### Example 2: MQTT With Authentication
+#### Example 3: MQTT With Authentication
 
 **Configuration.h:**
 ```cpp
@@ -239,7 +245,7 @@ void loop() {
 }
 ```
 
-#### Example 3: Runtime Configuration Changes
+#### Example 4: Runtime Configuration Changes
 
 Monitor and update telemetry intervals via MQTT (no code changes needed).
 
@@ -351,50 +357,10 @@ Subscribe to see current configurations:
 mosquitto_sub -h mqtt.example.com -t "esp32-c3-frosty/config/#" -v
 ```
 
-## Development Script (`deploy.sh`)
-￼
-￼
-￼￼
-### Basic Usage (Compile + Upload)
-
-```bash
-./scripts/deploy.sh
-```
-
-This compiles the `examples/Basic_Usage` sketch, then uploads it to a connected board.
-You can also run `./scripts/deploy.sh --dev` for the same compile+upload behavior.
-
-### Compile Only (No Upload)
-
-```bash
-./scripts/deploy.sh --compile-only
-```
-
-### Select a Different Board Target
-
-```bash
-./scripts/deploy.sh --fqbn esp32:esp32:esp32s3
-```
-
-### Specify Upload Port
-
-If multiple boards are connected, specify the target serial device:
-
-```bash
-./scripts/deploy.sh --port /dev/ttyACM0
-```
-
-### Show Script Help
-
-```bash
-./scripts/deploy.sh --help
-```
-
-### Troubleshooting
+## Troubleshooting
 
 #### Upload and Compilation Issues
 - **Serial port permission errors** (e.g., `/dev/ttyACM* is not readable`): Add your user to the serial-access group (`uucp` or `dialout`, depending on your distro), then reconnect the board
-- **Build directory permissions**: The script automatically falls back to `/tmp/esprazorblade-basic-usage-build` if permissions fail
 - **Compilation errors about missing Configuration.h**: Copy `Configuration.h.example` to `Configuration.h` in your sketch directory
 
 #### WiFi Connection Issues
