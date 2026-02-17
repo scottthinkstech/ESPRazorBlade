@@ -39,8 +39,7 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 1. Arduino IDE → Tools → Manage Libraries
 2. Search "ESPRazorBlade" → Install
 3. File → Examples → ESPRazorBlade → [Choose an example]
-4. Copy `Configuration.h.example` to `Configuration.h` in the example folder
-5. Edit `Configuration.h` with your WiFi credentials
+4. Edit `Configuration.h` in the example folder with your WiFi and MQTT credentials
 6. Install ESP32 board support and ArduinoMqttClient (see Board Setup and Software Requirements below)
 7. Select your board and upload!
 
@@ -53,11 +52,10 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
    - **Windows**: `Documents\Arduino\libraries\`
 3. Restart Arduino IDE
 4. File → Examples → ESPRazorBlade → [Choose an example]
-5. Copy `Configuration.h.example` to `Configuration.h` in the example folder
-6. Edit `Configuration.h` with your WiFi credentials
-7. Select your board and upload!
+5. Edit `Configuration.h` in the example folder with your WiFi and MQTT credentials
+6. Select your board and upload!
 
-**Note**: `Configuration.h` is gitignored - your credentials stay local.
+**Note**: Each example includes `Configuration.h` with placeholders. Edit it with your credentials; your changes stay local.
 
 **Available examples:**
 - `Ping_Test` - Hardware verification (no Configuration.h needed; start here if troubleshooting)
@@ -75,7 +73,7 @@ Lightweight Arduino library for ESP32 devices to broadcast device telemetry and 
 
 ### 1. Configure Settings
 
-Copy `Configuration.h.example` to `Configuration.h` and fill in your credentials:
+Edit `Configuration.h` in the example folder (it appears as a tab next to the sketch) with your credentials:
 
 ```cpp
 // WiFi Configuration
@@ -278,17 +276,14 @@ No restart required!
 
 **⚠️ Important Security Notes:**
 
-- **Credentials Protection**: Your WiFi and MQTT credentials are stored in `Configuration.h`, which is automatically gitignored to prevent accidental commits
-- **Never commit Configuration.h**: Always use `Configuration.h.example` as a template. Copy it to `Configuration.h` locally and keep your actual credentials out of version control
+- **Credentials Protection**: Your WiFi and MQTT credentials are stored in `Configuration.h`. Examples ship with placeholder values; edit in place with your credentials
 - **Use MQTT Authentication**: For production deployments, always enable MQTT username/password authentication by defining `MQTT_USERNAME` and `MQTT_PASSWORD`
 - **Network Security**: This library currently transmits data in plaintext. For sensitive applications, use a secured local network or VPN
 - **Future Enhancement**: TLS/SSL support for encrypted MQTT connections is planned for a future release
 
 **Best Practice Workflow:**
-1. Copy `Configuration.h.example` to `Configuration.h`
-2. Edit `Configuration.h` with your real credentials (local only)
-3. Never add `Configuration.h` to git (already gitignored)
-4. Share `Configuration.h.example` with placeholder values for others
+1. Open an example and edit `Configuration.h` with your credentials
+2. Your credentials stay in your local copy of the library
 
 ## Built-in Telemetry
 
@@ -361,7 +356,7 @@ mosquitto_sub -h mqtt.example.com -t "esp32-c3-frosty/config/#" -v
 
 #### Upload and Compilation Issues
 - **Serial port permission errors** (e.g., `/dev/ttyACM* is not readable`): Add your user to the serial-access group (`uucp` or `dialout`, depending on your distro), then reconnect the board
-- **Compilation errors about missing Configuration.h**: Copy `Configuration.h.example` to `Configuration.h` in your sketch directory
+- **Compilation errors about missing Configuration.h**: Each example includes `Configuration.h`; edit it with your credentials
 
 #### WiFi Connection Issues
 - **WiFi not connecting**: 

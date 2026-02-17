@@ -13,11 +13,10 @@
  * - Both retained and non-retained messages
  * 
  * Setup Instructions:
- * 1. Copy Configuration.h.example to Configuration.h
- * 2. Edit Configuration.h with your WiFi and MQTT broker details
- * 3. Leave MQTT_USERNAME and MQTT_PASSWORD commented out (no auth)
- * 4. Upload to your ESP32 board
- * 5. Open Serial Monitor at 115200 baud
+ * 1. Open Configuration.h (tab next to this sketch) and set your WiFi and MQTT broker details
+ * 2. Leave MQTT_USERNAME and MQTT_PASSWORD commented out (no auth)
+ * 3. Upload to your ESP32 board
+ * 4. Open Serial Monitor at 115200 baud
  *
  * Monitor published data with:
  *   mosquitto_sub -h <broker> -t "<DEVICE_ID>/#" -v

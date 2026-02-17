@@ -1,5 +1,6 @@
 # Configuration file with sensitive credentials
 Configuration.h
+!examples/**/Configuration.h
 
 # Development scripts (not part of library)
 scripts/
@@ -10,3 +11,9 @@ build/
 examples/DevelopmentExample/
 
 .arduino-build/
+
+# Build artifact directories (arduino-cli fallback output captured as path)
+tmp/
+
+# Malformed paths from build stderr (e.g. "Warning: Using fallback build directory: ...")
+Warning*

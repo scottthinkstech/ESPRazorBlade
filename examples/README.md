@@ -4,15 +4,11 @@ Ready-to-use example sketches demonstrating different features of the ESPRazorBl
 
 ## Quick Start
 
-1. **Copy the configuration template:**
-   ```bash
-   cd examples/[example_name]
-   cp Configuration.h.example Configuration.h
-   ```
+1. **Open an example** in Arduino IDE (File → Examples → ESPRazorBlade → [example name])
 
-2. **Edit Configuration.h** with your credentials and settings
+2. **Edit Configuration.h** (tab next to the sketch) with your credentials and settings
 
-3. **Open in Arduino IDE** and upload to your ESP32
+3. **Upload** to your ESP32
 
 4. **Open Serial Monitor** at **115200 baud**
 
@@ -274,15 +270,10 @@ Start Here
 ### Configuration Issues
 
 **ERROR: Failed to initialize ESPRazorBlade**
-- ✅ Verify `Configuration.h` exists (copy from `.example`)
+- ✅ Verify `Configuration.h` exists (it is included in each example)
+- ✅ Edit `Configuration.h` with your WiFi SSID and MQTT credentials
 - ✅ Check all required defines are present
 - ✅ Verify syntax (no typos in define names)
-
-**Missing Configuration.h**
-```bash
-# You need to copy the template first
-cp Configuration.h.example Configuration.h
-```
 
 ### WiFi Connection Issues
 

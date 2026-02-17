@@ -1,0 +1,24 @@
+#ifndef CONFIGURATION_H
+#define CONFIGURATION_H
+
+// WiFi Configuration
+// Edit the values below with your WiFi SSID and MQTT credentials
+#define WIFI_SSID "your_wifi_ssid_here"
+#define WIFI_PASSWORD "your_wifi_password_here"
+
+// MQTT Configuration
+#define MQTT_BROKER "your_mqtt_broker_ip_or_hostname"
+#define MQTT_PORT 1883
+#define MQTT_CLIENT_ID "ESPRazorBlade_Client"
+
+// MQTT Authentication (required for this example)
+#define MQTT_USERNAME "your_mqtt_username"
+#define MQTT_PASSWORD "your_mqtt_password"
+
+// Device Identity & Telemetry Configuration
+#define DEVICE_ID "my-esp32"                     // Unique device identifier for MQTT topics
+#define WIFI_SIGNAL_INTERVAL_MS 30000            // Publish WiFi RSSI every 30 seconds
+#define TIME_ALIVE_INTERVAL_MS 60000             // Publish time alive every 60 seconds
+#define FREE_HEAP_INTERVAL_MS 90000              // Publish free heap memory every 90 seconds
+
+#endif // CONFIGURATION_H
